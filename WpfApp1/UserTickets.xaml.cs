@@ -4,6 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
+
 namespace UI
 {
     public partial class UserTickets : Window
@@ -20,8 +21,7 @@ namespace UI
 
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
         {
-
-            if (string.IsNullOrWhiteSpace(txtTipo.Text) ||
+            if (cbTipo.SelectedItem == null ||
                 cbPrioridade.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(txtDescricao.Text))
             {
@@ -29,11 +29,12 @@ namespace UI
                 return;
             }
 
+            string tipo = (cbTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
             string prioridade = (cbPrioridade.SelectedItem as ComboBoxItem)?.Content.ToString();
 
             Ticket novo = new Ticket
             {
-                Tipo = txtTipo.Text,
+                Tipo = tipo,
                 Prioridade = prioridade,
                 Descricao = txtDescricao.Text,
                 EstadoTicket = "Por resolver",
@@ -41,12 +42,12 @@ namespace UI
                 DataCriacao = DateTime.Now,
                 IdUtilizador = utilizador.Id
             };
-            MessageBox.Show($"ID do Utilizador no ticket: {novo.IdUtilizador}");
+
             try
             {
                 TicketDAL.CriarTicket(novo);
                 MessageBox.Show("Ticket criado com sucesso!");
-                txtTipo.Clear();
+                cbTipo.SelectedIndex = -1;
                 cbPrioridade.SelectedIndex = -1;
                 txtDescricao.Clear();
             }
@@ -54,11 +55,11 @@ namespace UI
             {
                 MessageBox.Show("Erro ao criar ticket: " + ex.Message);
                 MessageBox.Show($"ID do Utilizador no ticket: {novo.IdUtilizador}");
-
             }
         }
 
-      
+
+
 
         private void BtnResponder_Click(object sender, RoutedEventArgs e)
         {
