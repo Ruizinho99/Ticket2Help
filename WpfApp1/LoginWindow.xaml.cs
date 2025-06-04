@@ -61,15 +61,28 @@ namespace UI
 
             if (user != null)
             {
-                MessageBox.Show($"Bem-vindo, {user.Nome}!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Podes abrir a MainWindow ou outra janela
-                this.Close();
+                MessageBox.Show("Login bem sucedido!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Redirecionar com base no tipo
+                if (user.Tipo == "IT_DESK")
+                {
+                    ResponderTickets janela = new ResponderTickets(user);
+                    janela.Show();
+                }
+                else
+                {
+                    UserTickets janela = new UserTickets(user);
+                    janela.Show();
+                }
+
+                this.Close(); // Fecha a janela de login
             }
             else
             {
                 MessageBox.Show("Credenciais inválidas.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
     }
 }
 
