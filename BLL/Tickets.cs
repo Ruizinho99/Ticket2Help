@@ -19,6 +19,8 @@ namespace BLL
         public DateTime? DataAtendimento { get; set; }
         public int UtilizadorId { get; set; }
         public string DetalhesTecnico { get; set; }
+
+        public string NomeFuncionario { get; set; }
     }
 
 }
