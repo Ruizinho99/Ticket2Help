@@ -51,21 +51,18 @@ namespace UI
             string username = txtUsername.Text;
             string password = txtPassword.Password;
 
-            // Aqui você pode chamar seu método de login, por exemplo:
-            // var user = UtilizadorDAL.Login(username, password);
-            // if (user != null) { sucesso } else { erro }
-
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Por favor, preencha o Username e Password.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            // Apenas exemplo:
-            if (username == "admin" && password == "1234")
+            Utilizador user = UtilizadorDAL.Login(username, password);
+
+            if (user != null)
             {
-                MessageBox.Show("Login bem sucedido!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Abrir a janela principal, fechar o login etc.
+                MessageBox.Show($"Bem-vindo, {user.Nome}!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Podes abrir a MainWindow ou outra janela
                 this.Close();
             }
             else
@@ -75,3 +72,7 @@ namespace UI
         }
     }
 }
+
+
+
+
