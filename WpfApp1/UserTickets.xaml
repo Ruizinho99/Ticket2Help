@@ -9,7 +9,11 @@
             <TabItem Header="Criar Ticket">
                 <StackPanel Margin="10">
                     <TextBlock Text="Tipo:"/>
-                    <TextBox x:Name="txtTipo" Margin="0,5"/>
+                    <ComboBox x:Name="cbTipo" Margin="0,5">
+                        <ComboBoxItem Content="Software"/>
+                        <ComboBoxItem Content="Hardware"/>
+                    </ComboBox>
+
 
                     <TextBlock Text="Prioridade:"/>
                     <ComboBox x:Name="cbPrioridade" Margin="0,5">
