@@ -41,7 +41,7 @@ namespace DAL
             using (SqlConnection conn = Database.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT TOP 1 * FROM Utilizador";
+                string query = "SELECT TOP 2 * FROM Utilizador";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
@@ -51,7 +51,8 @@ namespace DAL
                         Id = (int)reader["Id"],
                         Nome = reader["Nome"].ToString(),
                         Username = reader["Username"].ToString(),
-                        Tipo = reader["Tipo"].ToString()
+                        Tipo = reader["Tipo"].ToString(),
+                        Password = reader["Password"].ToString()
                     };
                 }
             }

@@ -10,8 +10,7 @@ namespace DAL
 {
     public static class Database
     {
-        private static string connectionString =
-     "Server=localhost;Database=pa_project;Trusted_Connection=True;";
+        private static string connectionString = @"Server=localhost;Database=pa_project;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=False";
 
 
         public static SqlConnection GetConnection()

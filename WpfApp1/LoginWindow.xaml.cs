@@ -32,7 +32,7 @@ namespace UI
 
                 if (user != null)
                 {
-                    txtCredenciaisExemplo.Text = $"Exemplo:\nUsername: {user.Username}\nPassword: {user.Id * 1000} (exemplo)";
+                    txtCredenciaisExemplo.Text = $"Exemplo:\nUsername: {user.Username}\nPassword: {user.Password}";
                 }
                 else
                 {
