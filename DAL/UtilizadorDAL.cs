@@ -37,8 +37,11 @@ namespace DAL
             using (SqlConnection conn = Database.GetConnection())
             {
                 conn.Open();
-                string query = "SELECT TOP 1 * FROM Utilizador"; 
+                string query = "SELECT TOP 1 * FROM Utilizador WHERE username = @username";
+
                 SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@username", "ISLA-5228");
+
                 SqlDataReader reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {

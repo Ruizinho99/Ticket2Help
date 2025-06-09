@@ -16,7 +16,7 @@ namespace UI
             InitializeComponent();
             this.utilizador = utilizador;
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
-
+            CarregarTicketsParaResponder();
         }
 
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
@@ -58,12 +58,30 @@ namespace UI
             }
         }
 
+        private void CarregarTicketsParaResponder()
+        {
+            // Obtem a lista de tickets para este utilizador
+            var tickets = TicketDAL.ObterTicketsParaResponder(utilizador.Id);
+
+            if (tickets.Count == 0)
+            {
+                cbTicketsParaResponder.ItemsSource = null;
+                cbTicketsParaResponder.Visibility = Visibility.Collapsed;
+                txtSemTickets.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                cbTicketsParaResponder.ItemsSource = tickets;
+                cbTicketsParaResponder.Visibility = Visibility.Visible;
+                txtSemTickets.Visibility = Visibility.Collapsed;
+            }
+        }
 
 
 
         private void BtnResponder_Click(object sender, RoutedEventArgs e)
         {
-            // Lógica para enviar resposta ao IT-Desk
+           
         }
     }
 }

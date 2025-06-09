@@ -77,5 +77,61 @@ namespace DAL
 
             return tickets;
         }
+
+
+        public static List<Ticket> ObterTicketsParaResponder(int idUtilizador)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            SELECT DISTINCT T.Id, T.Tipo, T.Prioridade, T.Descricao, T.EstadoTicket, 
+                   T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, 
+                   T.IdUtilizador, T.DetalhesTecnico, U.Nome 
+            FROM Ticket T
+            INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
+            INNER JOIN Mensagens M ON M.IdTicket = T.Id
+            INNER JOIN Utilizador IT ON M.IdRemetente = IT.Id
+            WHERE T.IdUtilizador = @IdUtilizador
+              AND T.EstadoTicket = 'porAtender'
+              AND IT.Nome = 'IT-DESK' -- ou o nome correto do utilizador IT-DESK
+        ";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IdUtilizador", idUtilizador);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        tickets.Add(new Ticket
+                        {
+                            Id = (int)reader["Id"],
+                            Tipo = reader["Tipo"].ToString(),
+                            Prioridade = reader["Prioridade"].ToString(),
+                            Descricao = reader["Descricao"].ToString(),
+                            EstadoTicket = reader["EstadoTicket"].ToString(),
+                            EstadoAtendimento = reader["EstadoAtendimento"].ToString(),
+                            DataCriacao = (DateTime)reader["DataCriacao"],
+                            DataAtendimento = reader["DataAtendimento"] == DBNull.Value ? null : (DateTime?)reader["DataAtendimento"],
+                            IdUtilizador = (int)reader["IdUtilizador"],
+                            DetalhesTecnico = reader["DetalhesTecnico"].ToString(),
+                            NomeFuncionario = reader["Nome"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return tickets;
+        }
+
     }
+
+
+
+
+
 }

@@ -52,8 +52,13 @@
                     <TextBox x:Name="txtResposta" Margin="0,5" Height="100" AcceptsReturn="True" TextWrapping="Wrap"/>
 
                     <Button Content="Enviar Resposta" Margin="0,10" Click="BtnResponder_Click"/>
+
+                    <!-- Mensagem caso não haja tickets -->
+                    <TextBlock x:Name="txtSemTickets" Text="Ainda não há tickets para responder. Aguarde por favor" 
+                   Foreground="Red" Visibility="Collapsed" Margin="0,10"/>
                 </StackPanel>
             </TabItem>
+
 
         </TabControl>
     </Grid>

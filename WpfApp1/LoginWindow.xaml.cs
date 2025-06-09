@@ -76,7 +76,7 @@ namespace UI
                     janela.Show();
                 }
 
-                this.Close(); // Fecha a janela de login
+                this.Close(); 
             }
             else
             {

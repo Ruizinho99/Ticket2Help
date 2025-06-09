@@ -14,5 +14,16 @@ namespace UI.Views
             _utilizador = utilizador;
             DataContext = new ResponderTicketsViewModel();
         }
+
+        private void BtnResetFilters_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as ResponderTicketsViewModel;
+            if (vm != null)
+            {
+                vm.FiltroTipo = null;
+                vm.FiltroPrioridade = null;
+            }
+        }
+
     }
 }

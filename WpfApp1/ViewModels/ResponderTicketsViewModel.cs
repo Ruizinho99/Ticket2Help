@@ -36,15 +36,22 @@ namespace UI.ViewModels
         public void CarregarTickets()
         {
             Tickets.Clear();
-            var lista = TicketDAL.ObterTicketsPorAtender(FiltroTipo, FiltroPrioridade);
+
+            string tipo = FiltroTipo == "Todos" ? null : FiltroTipo;
+            string prioridade = FiltroPrioridade == "Todos" ? null : FiltroPrioridade;
+
+            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade);
             foreach (var ticket in lista)
             {
                 Tickets.Add(ticket);
             }
         }
 
+
         public ResponderTicketsViewModel()
-        {
+            
+        {   FiltroTipo = "Todos";
+            FiltroPrioridade = "Todos";
             CarregarTickets();
         }
 

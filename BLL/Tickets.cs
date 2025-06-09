@@ -17,7 +17,6 @@ namespace BLL
         public string EstadoAtendimento { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAtendimento { get; set; }
-        public int UtilizadorId { get; set; }
         public string DetalhesTecnico { get; set; }
 
         public string NomeFuncionario { get; set; }

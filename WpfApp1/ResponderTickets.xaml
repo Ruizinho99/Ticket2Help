@@ -12,22 +12,26 @@
                           SelectedItem="{Binding FiltroTipo, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBox.ItemsSource>
                         <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                            <sys:String>Todos</sys:String>
                             <sys:String>Hardware</sys:String>
                             <sys:String>Software</sys:String>
                         </x:Array>
                     </ComboBox.ItemsSource>
                 </ComboBox>
 
-                <ComboBox Width="120"
+                <ComboBox Width="120" Margin="0 0 10 0"
                           SelectedItem="{Binding FiltroPrioridade, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBox.ItemsSource>
                         <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                            <sys:String>Todos</sys:String>
                             <sys:String>Baixa</sys:String>
                             <sys:String>Média</sys:String>
                             <sys:String>Alta</sys:String>
                         </x:Array>
                     </ComboBox.ItemsSource>
                 </ComboBox>
+
+                
             </StackPanel>
 
             <!-- Lista de Tickets -->
