@@ -18,8 +18,8 @@ namespace UI
 
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
 
-            CarregarTicketsParaResponder();      // Tickets pendentes para resposta
-            CarregarTicketsSubmetidos();        // Tickets submetidos pelo utilizador
+            CarregarTicketsParaResponder();      
+            CarregarTicketsSubmetidos();        
         }
 
 
@@ -70,7 +70,6 @@ namespace UI
 
         private void CarregarTicketsParaResponder()
         {
-            // Obtem a lista de tickets para este utilizador
             var tickets = TicketDAL.ObterTicketsParaResponder(utilizador.Id);
 
             if (tickets.Count == 0)
@@ -100,7 +99,7 @@ namespace UI
         {
             if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
             {
-                // Preenche o TextBox com o texto atual da resposta técnica
+            
                 txtResposta.Text = ticketSelecionado.DetalhesTecnico;
             }
             else
@@ -114,14 +113,14 @@ namespace UI
             if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
             {
                 ticketSelecionado.DetalhesTecnico = txtResposta.Text;
-                // Se quiser, pode atualizar o estado para “respondido” ou algo assim
-                // ticketSelecionado.EstadoTicket = "respondido"; // Exemplo
+             
+                
 
                 try
                 {
                     TicketDAL.ResponderTicket(ticketSelecionado);
                     MessageBox.Show("Resposta atualizada com sucesso!");
-                    CarregarTicketsParaResponder(); // Atualiza a lista para refletir alterações
+                    CarregarTicketsParaResponder(); 
                     txtResposta.Clear();
                     cbTicketsParaResponder.SelectedIndex = -1;
                 }
