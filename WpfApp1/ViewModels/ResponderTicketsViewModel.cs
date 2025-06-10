@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using UI.Views;
-using UI.Helpers; // importa o RelayCommand
+using UI.Helpers;
 
 
 namespace UI.ViewModels
@@ -45,7 +45,7 @@ namespace UI.ViewModels
             {
                 _ticketSelecionado = value;
                 OnPropertyChanged(nameof(TicketSelecionado));
-                CommandManager.InvalidateRequerySuggested(); // força reavaliação do CanExecute
+                CommandManager.InvalidateRequerySuggested(); 
             }
         }
 
@@ -86,7 +86,7 @@ namespace UI.ViewModels
             var janela = new ResponderTicketDetalhes(TicketSelecionado);
             janela.ShowDialog();
 
-            CarregarTickets(); // Atualiza a lista após resposta
+            CarregarTickets(); 
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
