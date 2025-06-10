@@ -29,8 +29,6 @@
                 </StackPanel>
             </TabItem>
 
-            <!-- Aba Ver Tickets -->
-            <!-- Aba Ver Tickets -->
             <TabItem Header="Ver Tickets">
                 <DataGrid x:Name="dgTickets"
           AutoGenerateColumns="False"
@@ -40,7 +38,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
                         <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                        <!-- Pode remover esta coluna também se a prioridade for descontinuada -->
+
                         <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
                         <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
                     </DataGrid.Columns>
@@ -48,7 +46,7 @@
             </TabItem>
 
 
-            <!-- Aba Responder ao IT-Desk -->
+
             <TabItem Header="Responder Admin">
                 <StackPanel Margin="10">
                     <TextBlock Text="Selecione o ticket:"/>
@@ -59,7 +57,7 @@
 
                     <Button Content="Enviar Resposta" Margin="0,10" Click="BtnResponder_Click"/>
 
-                    <!-- Mensagem caso não haja tickets -->
+
                     <TextBlock x:Name="txtSemTickets" Text="Ainda não há tickets para responder. Aguarde por favor" 
                    Foreground="Red" Visibility="Collapsed" Margin="0,10"/>
                 </StackPanel>
