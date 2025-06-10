@@ -2,6 +2,10 @@
 using DAL;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
+using UI.Views;
+using UI.Helpers;
+
 
 namespace UI.ViewModels
 {
@@ -33,6 +37,34 @@ namespace UI.ViewModels
             }
         }
 
+        private Ticket _ticketSelecionado;
+        public Ticket TicketSelecionado
+        {
+            get => _ticketSelecionado;
+            set
+            {
+                _ticketSelecionado = value;
+                OnPropertyChanged(nameof(TicketSelecionado));
+                CommandManager.InvalidateRequerySuggested(); 
+            }
+        }
+
+
+        public ICommand ResponderCommand { get; }
+
+        public ResponderTicketsViewModel()
+        {
+            FiltroTipo = "Todos";
+            FiltroPrioridade = "Todos";
+            CarregarTickets();
+
+            ResponderCommand = new RelayCommand(
+             executar: _ => ResponderTicket(),
+             podeExecutar: _ => TicketSelecionado != null
+         );
+
+        }
+
         public void CarregarTickets()
         {
             Tickets.Clear();
@@ -47,12 +79,14 @@ namespace UI.ViewModels
             }
         }
 
+        private void ResponderTicket()
+        {
+            if (TicketSelecionado == null) return;
 
-        public ResponderTicketsViewModel()
-            
-        {   FiltroTipo = "Todos";
-            FiltroPrioridade = "Todos";
-            CarregarTickets();
+            var janela = new ResponderTicketDetalhes(TicketSelecionado);
+            janela.ShowDialog();
+
+            CarregarTickets(); 
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

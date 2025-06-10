@@ -127,6 +127,76 @@ namespace DAL
 
             return tickets;
         }
+        public static void ResponderTicket(Ticket ticket)
+        {
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            UPDATE Ticket
+            SET EstadoTicket = @EstadoTicket,
+                EstadoAtendimento = @EstadoAtendimento,
+                DataAtendimento = @DataAtendimento,
+                DetalhesTecnico = @DetalhesTecnico
+            WHERE Id = @Id";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@EstadoTicket", ticket.EstadoTicket);
+                cmd.Parameters.AddWithValue("@EstadoAtendimento", ticket.EstadoAtendimento);
+                cmd.Parameters.AddWithValue("@DataAtendimento", ticket.DataAtendimento);
+                cmd.Parameters.AddWithValue("@DetalhesTecnico", ticket.DetalhesTecnico);
+                cmd.Parameters.AddWithValue("@Id", ticket.Id);
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static List<Ticket> ObterTicketsDoUtilizador(int idUtilizador)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                conn.Open();
+
+                string query = @"
+            SELECT T.Id, T.Tipo, T.Prioridade, T.Descricao, T.EstadoTicket, 
+                   T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, 
+                   T.IdUtilizador, T.DetalhesTecnico, U.Nome 
+            FROM Ticket T
+            INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
+            WHERE T.IdUtilizador = @IdUtilizador
+            ORDER BY T.DataCriacao DESC";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@IdUtilizador", idUtilizador);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        tickets.Add(new Ticket
+                        {
+                            Id = (int)reader["Id"],
+                            Tipo = reader["Tipo"].ToString(),
+                            Prioridade = reader["Prioridade"].ToString(),
+                            Descricao = reader["Descricao"].ToString(),
+                            EstadoTicket = reader["EstadoTicket"].ToString(),
+                            EstadoAtendimento = reader["EstadoAtendimento"].ToString(),
+                            DataCriacao = (DateTime)reader["DataCriacao"],
+                            DataAtendimento = reader["DataAtendimento"] == DBNull.Value ? null : (DateTime?)reader["DataAtendimento"],
+                            IdUtilizador = (int)reader["IdUtilizador"],
+                            DetalhesTecnico = reader["DetalhesTecnico"].ToString(),
+                            NomeFuncionario = reader["Nome"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return tickets;
+        }
+
 
     }
 

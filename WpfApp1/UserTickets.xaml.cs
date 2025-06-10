@@ -15,8 +15,18 @@ namespace UI
         {
             InitializeComponent();
             this.utilizador = utilizador;
+
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
-            CarregarTicketsParaResponder();
+
+            CarregarTicketsParaResponder();      
+            CarregarTicketsSubmetidos();        
+        }
+
+
+        private void CarregarTicketsSubmetidos()
+        {
+            var tickets = TicketDAL.ObterTicketsDoUtilizador(utilizador.Id);
+            dgTickets.ItemsSource = tickets;
         }
 
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
@@ -60,7 +70,6 @@ namespace UI
 
         private void CarregarTicketsParaResponder()
         {
-            // Obtem a lista de tickets para este utilizador
             var tickets = TicketDAL.ObterTicketsParaResponder(utilizador.Id);
 
             if (tickets.Count == 0)
@@ -76,12 +85,54 @@ namespace UI
                 txtSemTickets.Visibility = Visibility.Collapsed;
             }
         }
+        private void dgTickets_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (dgTickets.SelectedItem is Ticket ticketSelecionado)
+            {
+                DetalhesTicket detalhesWindow = new DetalhesTicket(ticketSelecionado);
+                detalhesWindow.ShowDialog();
+            }
+        }
 
 
+        private void CbTicketsParaResponder_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
+            {
+            
+                txtResposta.Text = ticketSelecionado.DetalhesTecnico;
+            }
+            else
+            {
+                txtResposta.Clear();
+            }
+        }
 
         private void BtnResponder_Click(object sender, RoutedEventArgs e)
         {
-           
+            if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
+            {
+                ticketSelecionado.DetalhesTecnico = txtResposta.Text;
+             
+                
+
+                try
+                {
+                    TicketDAL.ResponderTicket(ticketSelecionado);
+                    MessageBox.Show("Resposta atualizada com sucesso!");
+                    CarregarTicketsParaResponder(); 
+                    txtResposta.Clear();
+                    cbTicketsParaResponder.SelectedIndex = -1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao atualizar resposta: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecione um ticket para responder.");
+            }
         }
     }
 }

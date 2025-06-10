@@ -1,0 +1,28 @@
+﻿<Window x:Class="UI.DetalhesTicket"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Detalhes do Ticket" Height="400" Width="400" WindowStartupLocation="CenterScreen">
+    <StackPanel Margin="20" >
+        <TextBlock Text="Detalhes do Ticket" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+        <TextBlock Text="ID:" FontWeight="Bold"/>
+        <TextBlock Text="{Binding Id}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Tipo:" FontWeight="Bold"/>
+        <TextBlock Text="{Binding Tipo}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Prioridade:" FontWeight="Bold"/>
+        <TextBlock Text="{Binding Prioridade}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Estado:" FontWeight="Bold"/>
+        <TextBlock Text="{Binding EstadoTicket}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Criado em:" FontWeight="Bold"/>
+        <TextBlock Text="{Binding DataCriacao}" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Descrição:" FontWeight="Bold"/>
+        <TextBlock Text="{Binding Descricao}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Resposta Técnica:" FontWeight="Bold" Margin="0,10,0,0"/>
+        <TextBlock Text="{Binding DetalhesTecnico}" TextWrapping="Wrap" />
+    </StackPanel>
+</Window>

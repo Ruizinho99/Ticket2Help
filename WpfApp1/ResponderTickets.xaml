@@ -6,7 +6,7 @@
 
     <Grid Margin="10">
         <StackPanel>
-            <!-- Filtros -->
+
             <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
                 <ComboBox Width="120" Margin="0 10 10 0"
                           SelectedItem="{Binding FiltroTipo, UpdateSourceTrigger=PropertyChanged}">
@@ -34,8 +34,11 @@
                 
             </StackPanel>
 
-            <!-- Lista de Tickets -->
-            <DataGrid ItemsSource="{Binding Tickets}" AutoGenerateColumns="False" Height="400">
+
+            <DataGrid ItemsSource="{Binding Tickets}" 
+          SelectedItem="{Binding TicketSelecionado, Mode=TwoWay}"
+          AutoGenerateColumns="False" Height="400">
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="40"/>
                     <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="100"/>
@@ -45,6 +48,12 @@
                     <DataGridTextColumn Header="Funcionário" Binding="{Binding NomeFuncionario}" Width="150"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <Button Content="Responder Ticket"
+        Command="{Binding ResponderCommand}"
+        Margin="0,10,0,0"
+        HorizontalAlignment="Right"
+        Width="150"/>
+
         </StackPanel>
     </Grid>
 </Window>
