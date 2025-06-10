@@ -30,17 +30,23 @@
             </TabItem>
 
             <!-- Aba Ver Tickets -->
+            <!-- Aba Ver Tickets -->
             <TabItem Header="Ver Tickets">
-                <DataGrid x:Name="dgTickets" AutoGenerateColumns="False" Margin="10" IsReadOnly="True">
+                <DataGrid x:Name="dgTickets"
+          AutoGenerateColumns="False"
+          Margin="10"
+          IsReadOnly="True"
+          MouseDoubleClick="dgTickets_MouseDoubleClick">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
                         <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                        <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
+                        <!-- Pode remover esta coluna também se a prioridade for descontinuada -->
                         <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
                         <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
+
 
             <!-- Aba Responder ao IT-Desk -->
             <TabItem Header="Responder Admin">

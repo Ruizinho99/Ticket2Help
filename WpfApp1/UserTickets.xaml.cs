@@ -15,8 +15,18 @@ namespace UI
         {
             InitializeComponent();
             this.utilizador = utilizador;
+
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
-            CarregarTicketsParaResponder();
+
+            CarregarTicketsParaResponder();      // Tickets pendentes para resposta
+            CarregarTicketsSubmetidos();        // Tickets submetidos pelo utilizador
+        }
+
+
+        private void CarregarTicketsSubmetidos()
+        {
+            var tickets = TicketDAL.ObterTicketsDoUtilizador(utilizador.Id);
+            dgTickets.ItemsSource = tickets;
         }
 
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
@@ -76,12 +86,54 @@ namespace UI
                 txtSemTickets.Visibility = Visibility.Collapsed;
             }
         }
+        private void dgTickets_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (dgTickets.SelectedItem is Ticket ticketSelecionado)
+            {
+                DetalhesTicket detalhesWindow = new DetalhesTicket(ticketSelecionado);
+                detalhesWindow.ShowDialog();
+            }
+        }
 
 
+        private void CbTicketsParaResponder_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
+            {
+                // Preenche o TextBox com o texto atual da resposta técnica
+                txtResposta.Text = ticketSelecionado.DetalhesTecnico;
+            }
+            else
+            {
+                txtResposta.Clear();
+            }
+        }
 
         private void BtnResponder_Click(object sender, RoutedEventArgs e)
         {
-           
+            if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
+            {
+                ticketSelecionado.DetalhesTecnico = txtResposta.Text;
+                // Se quiser, pode atualizar o estado para “respondido” ou algo assim
+                // ticketSelecionado.EstadoTicket = "respondido"; // Exemplo
+
+                try
+                {
+                    TicketDAL.ResponderTicket(ticketSelecionado);
+                    MessageBox.Show("Resposta atualizada com sucesso!");
+                    CarregarTicketsParaResponder(); // Atualiza a lista para refletir alterações
+                    txtResposta.Clear();
+                    cbTicketsParaResponder.SelectedIndex = -1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro ao atualizar resposta: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecione um ticket para responder.");
+            }
         }
     }
 }
