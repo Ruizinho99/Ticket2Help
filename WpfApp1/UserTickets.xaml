@@ -29,8 +29,6 @@
                 </StackPanel>
             </TabItem>
 
-            <!-- Aba Ver Tickets -->
-            <!-- Aba Ver Tickets -->
             <TabItem Header="Ver Tickets">
                 <DataGrid x:Name="dgTickets"
           AutoGenerateColumns="False"
