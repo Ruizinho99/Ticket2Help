@@ -76,7 +76,8 @@ namespace UI.ViewModels
             string estadoTicket = FiltroEstadoTicket == "Todos" ? null : FiltroEstadoTicket;
             string estadoAtendimento = FiltroEstadoAtendimento == "Todos" ? null : FiltroEstadoAtendimento;
 
-            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade, estadoTicket, estadoAtendimento);
+            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade, estadoTicket, estadoAtendimento, _tecnicoLogado.Id);
+
 
 
             foreach (var ticket in lista)

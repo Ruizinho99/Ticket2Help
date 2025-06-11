@@ -35,7 +35,6 @@ namespace UI.Views
             string estadoSelecionado = (cmbEstadoTicket.SelectedItem as ComboBoxItem)?.Content.ToString();
             string resposta = txtResposta.Text.Trim();
 
-            
             // Se o estado for "atendido", a resposta é obrigatória
             if (estadoSelecionado == "atendido" && string.IsNullOrWhiteSpace(resposta))
             {
@@ -43,32 +42,36 @@ namespace UI.Views
                 return;
             }
 
-
-            // Atualiza o estado do ticket conforme selecionado
             _ticket.EstadoTicket = estadoSelecionado;
-
-            // Atualiza DetalhesTecnico com a resposta do técnico (pode ser vazia se for porAtender)
             _ticket.DetalhesTecnico = resposta;
 
             if (estadoSelecionado == "porAtender")
             {
-                // Não altera EstadoAtendimento e DataAtendimento
-                // Apenas atualiza o que for necessário, sem obrigatoriedade de resposta
+                // Não altera datas
             }
-            else
+            else if (estadoSelecionado == "emAtendimento")
             {
                 _ticket.DataAtendimento = DateTime.Now;
+                _ticket.DataConclusao = null;  // reseta caso tenha tido valor
                 _ticket.RespondidoPor = _tecnicoLogado.Id;
             }
-
-            // Atualiza o Id do técnico que respondeu (supondo que já tens o tecnicoLogado)
-            
+            else if (estadoSelecionado == "atendido")
+            {
+                if (!_ticket.DataAtendimento.HasValue)
+                {
+                    // Caso não tenha sido setada ainda a data de atendimento, setar agora
+                    _ticket.DataAtendimento = DateTime.Now;
+                }
+                _ticket.DataConclusao = DateTime.Now;
+                _ticket.RespondidoPor = _tecnicoLogado.Id;
+            }
 
             TicketDAL.ResponderTicket(_ticket);
 
             MessageBox.Show("Resposta enviada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
         }
+
 
 
 

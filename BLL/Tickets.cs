@@ -13,10 +13,10 @@ namespace BLL
         public string EstadoAtendimento { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAtendimento { get; set; }
+        public DateTime? DataConclusao { get; set; }    // NOVO CAMPO
         public int IdUtilizador { get; set; }             // quem criou
         public int? RespondidoPor { get; set; }           // quem respondeu (técnico/admin)
         public string DetalhesTecnico { get; set; }
         public string NomeFuncionario { get; set; }       // nome do criador, opcional para mostrar na UI
     }
 }
-
