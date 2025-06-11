@@ -39,15 +39,16 @@ namespace DAL
                 conn.Open();
 
                 string query = @"
-                    SELECT T.Id, T.Tipo, T.Prioridade, T.Descricao, T.EstadoTicket, 
-                           T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, 
-                           T.IdUtilizador, T.DetalhesTecnico, U.Nome 
-                    FROM Ticket T
-                    INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
-                    WHERE T.EstadoTicket = 'porAtender'
-                      AND (@Tipo IS NULL OR T.Tipo = @Tipo)
-                      AND (@Prioridade IS NULL OR T.Prioridade = @Prioridade)
-                ";
+            SELECT T.Id, T.Tipo, T.Prioridade, T.Descricao, T.EstadoTicket, 
+                   T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, 
+                   T.IdUtilizador, T.DetalhesTecnico, U.Nome 
+            FROM Ticket T
+            INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
+            WHERE (T.EstadoAtendimento = 'aberto' OR T.EstadoAtendimento = 'atendimento')
+              AND T.EstadoAtendimento <> 'Concluido'
+              AND (@Tipo IS NULL OR T.Tipo = @Tipo)
+              AND (@Prioridade IS NULL OR T.Prioridade = @Prioridade)
+        ";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -93,11 +94,8 @@ namespace DAL
                    T.IdUtilizador, T.DetalhesTecnico, U.Nome 
             FROM Ticket T
             INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
-            INNER JOIN Mensagens M ON M.IdTicket = T.Id
-            INNER JOIN Utilizador IT ON M.IdRemetente = IT.Id
             WHERE T.IdUtilizador = @IdUtilizador
-              AND T.EstadoTicket = 'porAtender'
-              AND IT.Nome = 'IT-DESK' -- ou o nome correto do utilizador IT-DESK
+              AND (T.EstadoAtendimento = 'aberto' OR T.EstadoAtendimento = 'atendimento')
         ";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -127,6 +125,8 @@ namespace DAL
 
             return tickets;
         }
+
+
         public static void ResponderTicket(Ticket ticket)
         {
             using (SqlConnection conn = Database.GetConnection())
@@ -196,6 +196,9 @@ namespace DAL
 
             return tickets;
         }
+
+       
+
 
 
     }

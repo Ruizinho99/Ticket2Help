@@ -1,5 +1,6 @@
 ﻿using BLL;
 using System.Windows;
+using UI.Views;
 
 namespace UI
 {
@@ -10,6 +11,8 @@ namespace UI
             InitializeComponent();
             DataContext = ticket;
         }
+
+      
     }
 }
 

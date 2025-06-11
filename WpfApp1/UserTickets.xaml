@@ -40,7 +40,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
                         <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                        <!-- Pode remover esta coluna também se a prioridade for descontinuada -->
+                        <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
                         <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
                         <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
                     </DataGrid.Columns>
@@ -49,21 +49,7 @@
 
 
             <!-- Aba Responder ao IT-Desk -->
-            <TabItem Header="Responder Admin">
-                <StackPanel Margin="10">
-                    <TextBlock Text="Selecione o ticket:"/>
-                    <ComboBox x:Name="cbTicketsParaResponder" DisplayMemberPath="Tipo" SelectedValuePath="Id" Margin="0,5"/>
-
-                    <TextBlock Text="Informação adicional:"/>
-                    <TextBox x:Name="txtResposta" Margin="0,5" Height="100" AcceptsReturn="True" TextWrapping="Wrap"/>
-
-                    <Button Content="Enviar Resposta" Margin="0,10" Click="BtnResponder_Click"/>
-
-                    <!-- Mensagem caso não haja tickets -->
-                    <TextBlock x:Name="txtSemTickets" Text="Ainda não há tickets para responder. Aguarde por favor" 
-                   Foreground="Red" Visibility="Collapsed" Margin="0,10"/>
-                </StackPanel>
-            </TabItem>
+           
 
 
         </TabControl>

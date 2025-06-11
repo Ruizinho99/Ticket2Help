@@ -58,5 +58,32 @@ namespace DAL
 
             return null;
         }
+        public static Utilizador ObterUtilizadorPorId(int id)
+        {
+            using (SqlConnection conn = Database.GetConnection())
+            {
+                conn.Open();
+                string query = "SELECT * FROM Utilizador WHERE Id = @id";
+
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    return new Utilizador
+                    {
+                        Id = (int)reader["Id"],
+                        Nome = reader["Nome"].ToString(),
+                        Username = reader["Username"].ToString(),
+                        Tipo = reader["Tipo"].ToString(),
+                        Password = reader["Password"].ToString()
+                    };
+                }
+            }
+
+            return null;
+        }
+
     }
 }

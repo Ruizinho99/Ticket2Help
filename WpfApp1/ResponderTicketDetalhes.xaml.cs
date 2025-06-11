@@ -28,7 +28,7 @@ namespace UI.Views
             // Atualiza o ticket no banco de dados
             _ticket.DetalhesTecnico = resposta;
             _ticket.EstadoTicket = "respondido";
-            _ticket.EstadoAtendimento = "concluido";
+            _ticket.EstadoAtendimento = "atendimento";
             _ticket.DataAtendimento = DateTime.Now;
 
             TicketDAL.ResponderTicket(_ticket);
@@ -41,5 +41,7 @@ namespace UI.Views
         {
             this.Close();
         }
+        
+
     }
 }
