@@ -73,13 +73,18 @@ namespace UI.ViewModels
 
             string tipo = FiltroTipo == "Todos" ? null : FiltroTipo;
             string prioridade = FiltroPrioridade == "Todos" ? null : FiltroPrioridade;
+            string estadoTicket = FiltroEstadoTicket == "Todos" ? null : FiltroEstadoTicket;
+            string estadoAtendimento = FiltroEstadoAtendimento == "Todos" ? null : FiltroEstadoAtendimento;
 
-            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade);
+            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade, estadoTicket, estadoAtendimento);
+
+
             foreach (var ticket in lista)
             {
                 Tickets.Add(ticket);
             }
         }
+
 
         private void ResponderTicket()
         {
@@ -93,6 +98,29 @@ namespace UI.ViewModels
             CarregarTickets();
         }
 
+        private string _filtroEstadoTicket = "Todos";
+        public string FiltroEstadoTicket
+        {
+            get => _filtroEstadoTicket;
+            set
+            {
+                _filtroEstadoTicket = value;
+                OnPropertyChanged(nameof(FiltroEstadoTicket));
+                CarregarTickets();
+            }
+        }
+
+        private string _filtroEstadoAtendimento = "Todos";
+        public string FiltroEstadoAtendimento
+        {
+            get => _filtroEstadoAtendimento;
+            set
+            {
+                _filtroEstadoAtendimento = value;
+                OnPropertyChanged(nameof(FiltroEstadoAtendimento));
+                CarregarTickets();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string nome) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nome));

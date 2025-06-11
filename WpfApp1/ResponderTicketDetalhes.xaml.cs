@@ -35,12 +35,14 @@ namespace UI.Views
             string estadoSelecionado = (cmbEstadoTicket.SelectedItem as ComboBoxItem)?.Content.ToString();
             string resposta = txtResposta.Text.Trim();
 
-            // Se o estado for diferente de "porAtender", a mensagem é obrigatória
-            if (estadoSelecionado != "porAtender" && string.IsNullOrWhiteSpace(resposta))
+            
+            // Se o estado for "atendido", a resposta é obrigatória
+            if (estadoSelecionado == "atendido" && string.IsNullOrWhiteSpace(resposta))
             {
                 MessageBox.Show("Por favor, insira uma resposta antes de guardar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+
 
             // Atualiza o estado do ticket conforme selecionado
             _ticket.EstadoTicket = estadoSelecionado;
@@ -55,7 +57,6 @@ namespace UI.Views
             }
             else
             {
-                _ticket.EstadoAtendimento = "atendimento";
                 _ticket.DataAtendimento = DateTime.Now;
                 _ticket.RespondidoPor = _tecnicoLogado.Id;
             }
