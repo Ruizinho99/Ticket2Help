@@ -13,11 +13,14 @@ namespace DAL
             {
                 conn.Open();
                 string query = @"
-                    INSERT INTO Ticket (Tipo, Prioridade, Descricao, EstadoTicket, EstadoAtendimento, DataCriacao, IdUtilizador)
-                    VALUES (@Tipo, @Prioridade, @Descricao, @EstadoTicket, @EstadoAtendimento, @DataCriacao, @IdUtilizador)";
+            INSERT INTO Ticket 
+                (Tipo, SubtipoProblema, Prioridade, Descricao, EstadoTicket, EstadoAtendimento, DataCriacao, IdUtilizador)
+            VALUES 
+                (@Tipo, @SubtipoProblema, @Prioridade, @Descricao, @EstadoTicket, @EstadoAtendimento, @DataCriacao, @IdUtilizador)";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Tipo", ticket.Tipo);
+                cmd.Parameters.AddWithValue("@SubtipoProblema", ticket.SubtipoProblema);
                 cmd.Parameters.AddWithValue("@Prioridade", ticket.Prioridade);
                 cmd.Parameters.AddWithValue("@Descricao", ticket.Descricao);
                 cmd.Parameters.AddWithValue("@EstadoTicket", "porAtender");
@@ -29,6 +32,7 @@ namespace DAL
             }
         }
 
+
         // 👇 Nova função para responder ao pedido da UI
         public static List<Ticket> ObterTicketsPorAtender(string tipoFiltro, string prioridadeFiltro)
         {
@@ -39,16 +43,20 @@ namespace DAL
                 conn.Open();
 
                 string query = @"
-            SELECT T.Id, T.Tipo, T.Prioridade, T.Descricao, T.EstadoTicket, 
-                   T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, 
-                   T.IdUtilizador, T.DetalhesTecnico, U.Nome 
-            FROM Ticket T
-            INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
-            WHERE (T.EstadoAtendimento = 'aberto' OR T.EstadoAtendimento = 'atendimento')
-              AND T.EstadoAtendimento <> 'Concluido'
-              AND (@Tipo IS NULL OR T.Tipo = @Tipo)
-              AND (@Prioridade IS NULL OR T.Prioridade = @Prioridade)
-        ";
+    SELECT T.Id, T.Tipo, T.Prioridade, T.Descricao, T.EstadoTicket, 
+           T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, 
+           T.IdUtilizador, T.DetalhesTecnico, U.Nome 
+    FROM Ticket T
+    INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
+    WHERE 
+        (T.EstadoAtendimento = 'aberto' OR T.EstadoAtendimento = 'naoResolvido')
+        AND T.EstadoAtendimento <> 'resolvido'
+        AND (T.EstadoTicket = 'porAtender' OR T.EstadoTicket = 'emAtendimento')
+        AND T.EstadoTicket <> 'atendido'
+        AND (@Tipo IS NULL OR T.Tipo = @Tipo)
+        AND (@Prioridade IS NULL OR T.Prioridade = @Prioridade)
+";
+
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -134,23 +142,33 @@ namespace DAL
                 conn.Open();
 
                 string query = @"
-            UPDATE Ticket
-            SET EstadoTicket = @EstadoTicket,
-                EstadoAtendimento = @EstadoAtendimento,
-                DataAtendimento = @DataAtendimento,
-                DetalhesTecnico = @DetalhesTecnico
-            WHERE Id = @Id";
+UPDATE Ticket
+SET EstadoTicket = @EstadoTicket,
+    EstadoAtendimento = @EstadoAtendimento,
+    DataAtendimento = @DataAtendimento,
+    DetalhesTecnico = @DetalhesTecnico,
+    RespondidoPor = @RespondidoPor
+WHERE Id = @Id";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@EstadoTicket", ticket.EstadoTicket);
-                cmd.Parameters.AddWithValue("@EstadoAtendimento", ticket.EstadoAtendimento);
-                cmd.Parameters.AddWithValue("@DataAtendimento", ticket.DataAtendimento);
-                cmd.Parameters.AddWithValue("@DetalhesTecnico", ticket.DetalhesTecnico);
+                cmd.Parameters.AddWithValue("@EstadoAtendimento", ticket.EstadoAtendimento ?? (object)DBNull.Value);
+
+                // Aqui verifica se DataAtendimento tem valor, senão passa DBNull.Value
+                if (ticket.DataAtendimento.HasValue)
+                    cmd.Parameters.AddWithValue("@DataAtendimento", ticket.DataAtendimento.Value);
+                else
+                    cmd.Parameters.AddWithValue("@DataAtendimento", DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@DetalhesTecnico", ticket.DetalhesTecnico ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@RespondidoPor", ticket.RespondidoPor.HasValue ? (object)ticket.RespondidoPor.Value : DBNull.Value);
                 cmd.Parameters.AddWithValue("@Id", ticket.Id);
 
                 cmd.ExecuteNonQuery();
             }
         }
+
+
 
         public static List<Ticket> ObterTicketsDoUtilizador(int idUtilizador)
         {

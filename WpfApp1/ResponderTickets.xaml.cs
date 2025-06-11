@@ -12,7 +12,8 @@ namespace UI.Views
         {
             InitializeComponent();
             _utilizador = utilizador;
-            DataContext = new ResponderTicketsViewModel();
+            DataContext = new ResponderTicketsViewModel(_utilizador);
+
         }
 
         private void BtnResetFilters_Click(object sender, RoutedEventArgs e)

@@ -33,18 +33,21 @@ namespace UI
         {
             if (cbTipo.SelectedItem == null ||
                 cbPrioridade.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(txtDescricao.Text))
+                string.IsNullOrWhiteSpace(txtDescricao.Text) ||
+                cbSubtipoProblema.SelectedItem == null)
             {
                 MessageBox.Show("Todos os campos são obrigatórios.");
                 return;
             }
 
+            string subtipo = cbSubtipoProblema.SelectedItem.ToString();
             string tipo = (cbTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
             string prioridade = (cbPrioridade.SelectedItem as ComboBoxItem)?.Content.ToString();
 
             Ticket novo = new Ticket
             {
                 Tipo = tipo,
+                SubtipoProblema = subtipo,
                 Prioridade = prioridade,
                 Descricao = txtDescricao.Text,
                 EstadoTicket = "Por resolver",
@@ -58,6 +61,7 @@ namespace UI
                 TicketDAL.CriarTicket(novo);
                 MessageBox.Show("Ticket criado com sucesso!");
                 cbTipo.SelectedIndex = -1;
+                cbSubtipoProblema.SelectedIndex = -1;
                 cbPrioridade.SelectedIndex = -1;
                 txtDescricao.Clear();
             }
@@ -68,7 +72,8 @@ namespace UI
             }
         }
 
-       
+
+
         private void dgTickets_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (dgTickets.SelectedItem is Ticket ticketSelecionado)
@@ -78,9 +83,30 @@ namespace UI
             }
         }
 
+        private void cbTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cbSubtipoProblema.Items.Clear();
 
-      
+            var tipoSelecionado = (cbTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-        
+            if (tipoSelecionado == "Hardware")
+            {
+                cbSubtipoProblema.Items.Add("Disco rígido");
+                cbSubtipoProblema.Items.Add("Placa mãe");
+                cbSubtipoProblema.Items.Add("RAM");
+                cbSubtipoProblema.Items.Add("Monitor");
+            }
+            else if (tipoSelecionado == "Software")
+            {
+                cbSubtipoProblema.Items.Add("Sistema operativo");
+                cbSubtipoProblema.Items.Add("Aplicação interna");
+                cbSubtipoProblema.Items.Add("Licença");
+                cbSubtipoProblema.Items.Add("Erro de atualização");
+            }
+        }
+
+
+
+
     }
 }

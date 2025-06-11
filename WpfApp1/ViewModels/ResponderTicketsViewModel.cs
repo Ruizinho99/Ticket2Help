@@ -51,9 +51,11 @@ namespace UI.ViewModels
 
 
         public ICommand ResponderCommand { get; }
+        private Utilizador _tecnicoLogado;
 
-        public ResponderTicketsViewModel()
+        public ResponderTicketsViewModel(Utilizador tecnico)
         {
+            _tecnicoLogado = tecnico;
             FiltroTipo = "Todos";
             FiltroPrioridade = "Todos";
             CarregarTickets();
@@ -83,11 +85,14 @@ namespace UI.ViewModels
         {
             if (TicketSelecionado == null) return;
 
-            var janela = new ResponderTicketDetalhes(TicketSelecionado);
+            
+            var janela = new ResponderTicketDetalhes(TicketSelecionado, _tecnicoLogado);
+            // passa o técnico como segundo parâmetro
             janela.ShowDialog();
 
-            CarregarTickets(); 
+            CarregarTickets();
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string nome) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nome));
