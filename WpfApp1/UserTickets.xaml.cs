@@ -20,7 +20,6 @@ namespace UI
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
 
            
-
             CarregarTicketsSubmetidos();        // Tickets submetidos pelo utilizador
         }
 
@@ -149,6 +148,33 @@ namespace UI
                 cbSubtipoProblema.Items.Add("Licença");
                 cbSubtipoProblema.Items.Add("Erro de atualização");
             }
+        }
+
+        private void BtnCriarTicket_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenuGrid.Visibility = Visibility.Collapsed;
+            CriarTicketGrid.Visibility = Visibility.Visible;
+        }
+
+        private void BtnVerTickets_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenuGrid.Visibility = Visibility.Collapsed;
+            VerTicketsGrid.Visibility = Visibility.Visible;
+            CarregarTicketsSubmetidos(); // para garantir que atualiza sempre
+        }
+
+        private void BtnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            CriarTicketGrid.Visibility = Visibility.Collapsed;
+            VerTicketsGrid.Visibility = Visibility.Collapsed;
+            MainMenuGrid.Visibility = Visibility.Visible;
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            this.Close(); // Fecha a janela atual (UserTickets)
         }
 
 
