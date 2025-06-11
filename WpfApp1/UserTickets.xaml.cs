@@ -3,6 +3,7 @@ using BLL;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 
 namespace UI
@@ -18,16 +19,61 @@ namespace UI
 
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
 
-             
+           
+
             CarregarTicketsSubmetidos();        // Tickets submetidos pelo utilizador
         }
 
 
-        private void CarregarTicketsSubmetidos()
+        private void CarregarTicketsSubmetidos(string tipoFiltro = null, string prioridadeFiltro = null, string estadoFiltro = null, string ordenarPor = null)
         {
             var tickets = TicketDAL.ObterTicketsDoUtilizador(utilizador.Id);
+
+            // Filtrar tipo
+            if (!string.IsNullOrEmpty(tipoFiltro) && tipoFiltro != "Todos")
+                tickets = tickets.Where(t => t.Tipo == tipoFiltro).ToList();
+
+            // Filtrar prioridade
+            if (!string.IsNullOrEmpty(prioridadeFiltro) && prioridadeFiltro != "Todas")
+                tickets = tickets.Where(t => t.Prioridade == prioridadeFiltro).ToList();
+
+            // Filtrar estado
+            if (!string.IsNullOrEmpty(estadoFiltro) && estadoFiltro != "Todos")
+                tickets = tickets.Where(t => t.EstadoTicket.Equals(estadoFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            // Ordenar
+            switch (ordenarPor)
+            {
+                case "ID Ascendente":
+                    tickets = tickets.OrderBy(t => t.Id).ToList();
+                    break;
+                case "ID Descendente":
+                    tickets = tickets.OrderByDescending(t => t.Id).ToList();
+                    break;
+                case "Data Ascendente":
+                    tickets = tickets.OrderBy(t => t.DataCriacao).ToList();
+                    break;
+                case "Data Descendente":
+                    tickets = tickets.OrderByDescending(t => t.DataCriacao).ToList();
+                    break;
+                default:
+                    tickets = tickets.OrderByDescending(t => t.DataCriacao).ToList();
+                    break;
+            }
+
             dgTickets.ItemsSource = tickets;
         }
+
+        private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+            string tipoFiltro = (cbFiltroTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string prioridadeFiltro = (cbFiltroPrioridade.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string estadoFiltro = (cbFiltroEstado.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string ordenarPor = (cbOrdenarPor.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            CarregarTicketsSubmetidos(tipoFiltro, prioridadeFiltro, estadoFiltro, ordenarPor);
+        }
+
 
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
         {

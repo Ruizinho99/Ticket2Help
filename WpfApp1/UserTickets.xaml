@@ -32,26 +32,64 @@
                     <Button Content="Submeter Ticket" Margin="0,10" Click="BtnSubmeter_Click"/>
                 </StackPanel>
             </TabItem>
-
             <TabItem Header="Ver Tickets">
-                <DataGrid x:Name="dgTickets"
-          AutoGenerateColumns="False"
-          Margin="10"
-          IsReadOnly="True"
-          MouseDoubleClick="dgTickets_MouseDoubleClick">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                        <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                        <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
-                        <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
-                        <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <StackPanel Margin="10" Orientation="Vertical" >
+
+                    <!-- Filtros -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Center" >
+
+                        <TextBlock Text="Tipo:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbFiltroTipo" Width="100" Margin="0,0,10,0">
+                            <ComboBoxItem Content="Todos" IsSelected="True"/>
+                            <ComboBoxItem Content="Software"/>
+                            <ComboBoxItem Content="Hardware"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Prioridade:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbFiltroPrioridade" Width="100" Margin="0,0,10,0">
+                            <ComboBoxItem Content="Todas" IsSelected="True"/>
+                            <ComboBoxItem Content="Alta"/>
+                            <ComboBoxItem Content="Média"/>
+                            <ComboBoxItem Content="Baixa"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Estado:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbFiltroEstado" Width="100" Margin="0,0,10,0">
+                            <ComboBoxItem Content="Todos" IsSelected="True"/>
+                            <ComboBoxItem Content="Aberto"/>
+                            <ComboBoxItem Content="Resolvido"/>
+                            <ComboBoxItem Content="Não Resolvido"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Ordenar por:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        <ComboBox x:Name="cbOrdenarPor" Width="120" Margin="0,0,10,0">
+                            <ComboBoxItem Content="ID Ascendente" IsSelected="True"/>
+                            <ComboBoxItem Content="ID Descendente"/>
+                            <ComboBoxItem Content="Data Ascendente"/>
+                            <ComboBoxItem Content="Data Descendente"/>
+                        </ComboBox>
+
+                        <Button Content="Aplicar Filtros" Click="BtnAplicarFiltros_Click" Width="100"/>
+
+                    </StackPanel>
+
+                    <!-- DataGrid com tickets -->
+                    <DataGrid x:Name="dgTickets"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  MouseDoubleClick="dgTickets_MouseDoubleClick">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
+                            <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
+                            <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
+                            <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
             </TabItem>
 
 
-            <!-- Aba Responder ao IT-Desk -->
-           
 
 
         </TabControl>
