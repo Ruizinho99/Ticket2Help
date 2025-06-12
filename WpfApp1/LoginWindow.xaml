@@ -1,24 +1,71 @@
 ﻿<Window x:Class="UI.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="Login" Height="600" Width="400" WindowStartupLocation="CenterScreen">
+        Title="Ticket2Help - Login"
+        Height="600" Width="400"
+        Background="#f2f2f2"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowStyle="None">
 
-    <Grid Margin="10">
-        <StackPanel>
+    <Border CornerRadius="10" Background="White" Padding="30" Margin="30" BorderBrush="#ccc" BorderThickness="1" VerticalAlignment="Center">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+
+            <TextBlock Text="Ticket2Help" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="#2D2D2D"
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,20"/>
+
             <TextBlock x:Name="txtCredenciaisExemplo" 
-               Margin="0,10,0,0" 
-               Foreground="Gray" 
-               TextWrapping="Wrap" 
-               FontSize="12"/>
-            <Label Content="Username"/>
-            <Grid>
-                <TextBox x:Name="txtUsername" Height="25" VerticalContentAlignment="Center"/>
-            </Grid>
-            <Label Content="Password"/>
+                       Foreground="Gray" 
+                       TextWrapping="Wrap" 
+                       FontSize="12"
+                       TextAlignment="Center"
+                       Margin="0,0,0,20"/>
 
-            <PasswordBox x:Name="txtPassword" Margin="0,10,0,10" Height="25" />
-            <Button Content="Entrar" Height="30" Click="BtnEntrar_Click"/>
+            <TextBlock Text="Username" Margin="0,0,0,5"/>
+            <Border Background="#f7f7f7" CornerRadius="6" BorderBrush="#ccc" BorderThickness="1" Margin="0,0,0,15">
+                <TextBox x:Name="txtUsername"
+                         FontSize="14"
+                         Padding="10"
+                         BorderThickness="0"
+                         Background="Transparent"/>
+            </Border>
+
+            <TextBlock Text="Password" Margin="0,0,0,5"/>
+            <Border Background="#f7f7f7" CornerRadius="6" BorderBrush="#ccc" BorderThickness="1" Margin="0,0,0,25">
+                <PasswordBox x:Name="txtPassword"
+                             FontSize="14"
+                             Padding="10"
+                             BorderThickness="0"
+                             Background="Transparent"/>
+            </Border>
+
+            <Button Content="Entrar"
+                    Height="40"
+                    FontSize="16"
+                    Background="#274360"
+                    Foreground="White"
+                    BorderBrush="#274360"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    Margin="0"
+                    Padding="10"
+                    Click="BtnEntrar_Click">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
         </StackPanel>
-    </Grid>
+    </Border>
 </Window>

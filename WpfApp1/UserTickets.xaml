@@ -1,101 +1,119 @@
 ﻿<Window x:Class="UI.UserTickets"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Área do Utilizador" Height="500" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="Área do Utilizador"
+        Height="650" Width="900"
+        Background="#f2f2f2"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
 
-        <!-- Página Inicial -->
-        <Grid x:Name="MainMenuGrid" Visibility="Visible">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="200">
-                <Button Content="Criar Ticket" Click="BtnCriarTicket_Click" Height="40" Margin="0,0,0,10"/>
-                <Button Content="Ver Tickets" Click="BtnVerTickets_Click" Height="40" Margin="0,0,0,10"/>
-                <Button Content="Logout" Click="BtnLogout_Click" Height="40"/>
-            </StackPanel>
+    <Border CornerRadius="10" Background="White" Margin="20" Padding="20" BorderBrush="#ccc" BorderThickness="1">
+        <Grid>
 
-        </Grid>
+            <!-- Página Inicial -->
+            <Grid x:Name="MainMenuGrid" Visibility="Visible">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="250">
+                    <TextBlock Text="Bem-vindo!" FontSize="22" FontWeight="Bold" Foreground="#274360" Margin="0 0 0 20" HorizontalAlignment="Center"/>
+                    <Button Content="Criar Ticket" Click="BtnCriarTicket_Click" Height="40" Margin="0,0,0,10"
+                            Background="#274360" Foreground="White" BorderBrush="#274360"/>
+                    <Button Content="Ver Tickets" Click="BtnVerTickets_Click" Height="40" Margin="0,0,0,10"
+                            Background="#274360" Foreground="White" BorderBrush="#274360"/>
+                    <Button Content="Logout" Click="BtnLogout_Click" Height="40"
+                            Background="#d9534f" Foreground="White" BorderBrush="#d9534f"/>
+                </StackPanel>
+            </Grid>
 
-        <!-- Página Criar Ticket -->
-        <Grid x:Name="CriarTicketGrid" Visibility="Collapsed" Margin="10">
-            <StackPanel>
-                <TextBlock Text="Tipo:"/>
-                <ComboBox x:Name="cbTipo" Margin="0,5" SelectionChanged="cbTipo_SelectionChanged">
-                    <ComboBoxItem Content="Software"/>
-                    <ComboBoxItem Content="Hardware"/>
-                </ComboBox>
-
-                <TextBlock Text="Tipo de Problema:"/>
-                <ComboBox x:Name="cbSubtipoProblema" Margin="0,5"/>
-
-                <TextBlock Text="Prioridade:"/>
-                <ComboBox x:Name="cbPrioridade" Margin="0,5">
-                    <ComboBoxItem Content="Baixa"/>
-                    <ComboBoxItem Content="Média"/>
-                    <ComboBoxItem Content="Alta"/>
-                </ComboBox>
-
-                <TextBlock Text="Descrição:"/>
-                <TextBox x:Name="txtDescricao" Margin="0,5" Height="100" AcceptsReturn="True" TextWrapping="Wrap"/>
-
-                <Button Content="Submeter Ticket" Margin="0,10" Click="BtnSubmeter_Click"/>
-                <Button Content="← Voltar" Click="BtnVoltar_Click" Width="100"/>
-            </StackPanel>
-        </Grid>
-
-        <!-- Página Ver Tickets -->
-        <Grid x:Name="VerTicketsGrid" Visibility="Collapsed" Margin="10">
-            <StackPanel Orientation="Vertical">
-
-                <!-- Filtros -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBlock Text="Tipo:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <ComboBox x:Name="cbFiltroTipo" Width="100" Margin="0,0,10,0">
-                        <ComboBoxItem Content="Todos" IsSelected="True"/>
+            <!-- Página Criar Ticket -->
+            <Grid x:Name="CriarTicketGrid" Visibility="Collapsed" Margin="10">
+                <StackPanel Width="400" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Tipo:"/>
+                    <ComboBox x:Name="cbTipo" Margin="0,5" SelectionChanged="cbTipo_SelectionChanged">
                         <ComboBoxItem Content="Software"/>
                         <ComboBoxItem Content="Hardware"/>
                     </ComboBox>
 
-                    <TextBlock Text="Prioridade:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <ComboBox x:Name="cbFiltroPrioridade" Width="100" Margin="0,0,10,0">
-                        <ComboBoxItem Content="Todas" IsSelected="True"/>
-                        <ComboBoxItem Content="Alta"/>
-                        <ComboBoxItem Content="Média"/>
+                    <TextBlock Text="Tipo de Problema:"/>
+                    <ComboBox x:Name="cbSubtipoProblema" Margin="0,5"/>
+
+                    <TextBlock Text="Prioridade:"/>
+                    <ComboBox x:Name="cbPrioridade" Margin="0,5">
                         <ComboBoxItem Content="Baixa"/>
+                        <ComboBoxItem Content="Média"/>
+                        <ComboBoxItem Content="Alta"/>
                     </ComboBox>
 
-                    <TextBlock Text="Estado:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <ComboBox x:Name="cbFiltroEstado" Width="100" Margin="0,0,10,0">
-                        <ComboBoxItem Content="Todos" IsSelected="True"/>
-                        <ComboBoxItem Content="Aberto"/>
-                        <ComboBoxItem Content="Resolvido"/>
-                        <ComboBoxItem Content="Não Resolvido"/>
-                    </ComboBox>
+                    <TextBlock Text="Descrição:"/>
+                    <TextBox x:Name="txtDescricao" Margin="0,5" Height="100" AcceptsReturn="True" TextWrapping="Wrap"/>
 
-                    <TextBlock Text="Ordenar por:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                    <ComboBox x:Name="cbOrdenarPor" Width="120" Margin="0,0,10,0">
-                        <ComboBoxItem Content="ID Ascendente" IsSelected="True"/>
-                        <ComboBoxItem Content="ID Descendente"/>
-                        <ComboBoxItem Content="Data Ascendente"/>
-                        <ComboBoxItem Content="Data Descendente"/>
-                    </ComboBox>
-
-                    <Button Content="Aplicar Filtros" Click="BtnAplicarFiltros_Click" Width="100"/>
+                    <Button Content="Submeter Ticket" Margin="0,10,0,5" Click="BtnSubmeter_Click"
+                            Background="#274360" Foreground="White" BorderBrush="#274360"/>
+                    <Button Content="← Voltar" Click="BtnVoltar_Click" Width="100"/>
                 </StackPanel>
+            </Grid>
 
-                <DataGrid x:Name="dgTickets"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          MouseDoubleClick="dgTickets_MouseDoubleClick">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                        <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                        <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
-                        <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
-                        <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+            <!-- Página Ver Tickets -->
+            <Grid x:Name="VerTicketsGrid" Visibility="Collapsed" Margin="10">
+                <StackPanel Orientation="Vertical">
 
-                <Button Content="← Voltar" Click="BtnVoltar_Click" Width="100" Margin="0,10,0,0"/>
-            </StackPanel>
+                    <!-- Filtros -->
+                    <StackPanel Margin="0,0,0,10">
+                        <WrapPanel Margin="0,0,0,10">
+                            <TextBlock Text="Tipo:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="cbFiltroTipo" Width="100" Margin="0,0,10,0">
+                                <ComboBoxItem Content="Todos" IsSelected="True"/>
+                                <ComboBoxItem Content="Software"/>
+                                <ComboBoxItem Content="Hardware"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Prioridade:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="cbFiltroPrioridade" Width="100" Margin="0,0,10,0">
+                                <ComboBoxItem Content="Todas" IsSelected="True"/>
+                                <ComboBoxItem Content="Alta"/>
+                                <ComboBoxItem Content="Média"/>
+                                <ComboBoxItem Content="Baixa"/>
+                            </ComboBox>
+                        </WrapPanel>
+
+                        <WrapPanel>
+                            <TextBlock Text="Estado:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="cbFiltroEstado" Width="100" Margin="0,0,10,0">
+                                <ComboBoxItem Content="Todos" IsSelected="True"/>
+                                <ComboBoxItem Content="Aberto"/>
+                                <ComboBoxItem Content="Resolvido"/>
+                                <ComboBoxItem Content="Não Resolvido"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Ordenar por:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <ComboBox x:Name="cbOrdenarPor" Width="120" Margin="0,0,10,0">
+                                <ComboBoxItem Content="ID Ascendente" IsSelected="True"/>
+                                <ComboBoxItem Content="ID Descendente"/>
+                                <ComboBoxItem Content="Data Ascendente"/>
+                                <ComboBoxItem Content="Data Descendente"/>
+                            </ComboBox>
+
+                            <Button Content="Aplicar Filtros" Click="BtnAplicarFiltros_Click" Width="120"
+                                    Background="#274360" Foreground="White" BorderBrush="#274360"/>
+                        </WrapPanel>
+                    </StackPanel>
+
+                    <DataGrid x:Name="dgTickets"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              Height="300"
+                              MouseDoubleClick="dgTickets_MouseDoubleClick"
+                              Margin="0,0,0,10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
+                            <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
+                            <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
+                            <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
+                            <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <Button Content="← Voltar" Click="BtnVoltar_Click" Width="100"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>
