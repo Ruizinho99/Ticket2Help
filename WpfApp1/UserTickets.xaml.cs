@@ -60,7 +60,8 @@ namespace UI
                     break;
             }
 
-            dgTickets.ItemsSource = tickets;
+            icTickets.ItemsSource = tickets;
+
         }
 
         private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
@@ -119,9 +120,9 @@ namespace UI
 
 
 
-        private void dgTickets_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void BtnVerDetalhes_Click(object sender, RoutedEventArgs e)
         {
-            if (dgTickets.SelectedItem is Ticket ticketSelecionado)
+            if (sender is Button btn && btn.DataContext is Ticket ticketSelecionado)
             {
                 DetalhesTicket detalhesWindow = new DetalhesTicket(ticketSelecionado);
                 detalhesWindow.ShowDialog();
