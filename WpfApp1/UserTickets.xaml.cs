@@ -3,6 +3,7 @@ using BLL;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Linq;
 
 
 namespace UI
@@ -18,33 +19,80 @@ namespace UI
 
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
 
-            CarregarTicketsParaResponder();      
-            CarregarTicketsSubmetidos();        
+           
+            CarregarTicketsSubmetidos();        // Tickets submetidos pelo utilizador
         }
 
 
-        private void CarregarTicketsSubmetidos()
+        private void CarregarTicketsSubmetidos(string tipoFiltro = null, string prioridadeFiltro = null, string estadoFiltro = null, string ordenarPor = null)
         {
             var tickets = TicketDAL.ObterTicketsDoUtilizador(utilizador.Id);
+
+            // Filtrar tipo
+            if (!string.IsNullOrEmpty(tipoFiltro) && tipoFiltro != "Todos")
+                tickets = tickets.Where(t => t.Tipo == tipoFiltro).ToList();
+
+            // Filtrar prioridade
+            if (!string.IsNullOrEmpty(prioridadeFiltro) && prioridadeFiltro != "Todas")
+                tickets = tickets.Where(t => t.Prioridade == prioridadeFiltro).ToList();
+
+            // Filtrar estado
+            if (!string.IsNullOrEmpty(estadoFiltro) && estadoFiltro != "Todos")
+                tickets = tickets.Where(t => t.EstadoTicket.Equals(estadoFiltro, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            // Ordenar
+            switch (ordenarPor)
+            {
+                case "ID Ascendente":
+                    tickets = tickets.OrderBy(t => t.Id).ToList();
+                    break;
+                case "ID Descendente":
+                    tickets = tickets.OrderByDescending(t => t.Id).ToList();
+                    break;
+                case "Data Ascendente":
+                    tickets = tickets.OrderBy(t => t.DataCriacao).ToList();
+                    break;
+                case "Data Descendente":
+                    tickets = tickets.OrderByDescending(t => t.DataCriacao).ToList();
+                    break;
+                default:
+                    tickets = tickets.OrderByDescending(t => t.DataCriacao).ToList();
+                    break;
+            }
+
             dgTickets.ItemsSource = tickets;
         }
+
+        private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+            string tipoFiltro = (cbFiltroTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string prioridadeFiltro = (cbFiltroPrioridade.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string estadoFiltro = (cbFiltroEstado.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string ordenarPor = (cbOrdenarPor.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            CarregarTicketsSubmetidos(tipoFiltro, prioridadeFiltro, estadoFiltro, ordenarPor);
+        }
+
 
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
         {
             if (cbTipo.SelectedItem == null ||
                 cbPrioridade.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(txtDescricao.Text))
+                string.IsNullOrWhiteSpace(txtDescricao.Text) ||
+                cbSubtipoProblema.SelectedItem == null)
             {
                 MessageBox.Show("Todos os campos são obrigatórios.");
                 return;
             }
 
+            string subtipo = cbSubtipoProblema.SelectedItem.ToString();
             string tipo = (cbTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
             string prioridade = (cbPrioridade.SelectedItem as ComboBoxItem)?.Content.ToString();
 
             Ticket novo = new Ticket
             {
                 Tipo = tipo,
+                SubtipoProblema = subtipo,
                 Prioridade = prioridade,
                 Descricao = txtDescricao.Text,
                 EstadoTicket = "Por resolver",
@@ -58,6 +106,7 @@ namespace UI
                 TicketDAL.CriarTicket(novo);
                 MessageBox.Show("Ticket criado com sucesso!");
                 cbTipo.SelectedIndex = -1;
+                cbSubtipoProblema.SelectedIndex = -1;
                 cbPrioridade.SelectedIndex = -1;
                 txtDescricao.Clear();
             }
@@ -68,23 +117,8 @@ namespace UI
             }
         }
 
-        private void CarregarTicketsParaResponder()
-        {
-            var tickets = TicketDAL.ObterTicketsParaResponder(utilizador.Id);
 
-            if (tickets.Count == 0)
-            {
-                cbTicketsParaResponder.ItemsSource = null;
-                cbTicketsParaResponder.Visibility = Visibility.Collapsed;
-                txtSemTickets.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                cbTicketsParaResponder.ItemsSource = tickets;
-                cbTicketsParaResponder.Visibility = Visibility.Visible;
-                txtSemTickets.Visibility = Visibility.Collapsed;
-            }
-        }
+
         private void dgTickets_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (dgTickets.SelectedItem is Ticket ticketSelecionado)
@@ -94,45 +128,57 @@ namespace UI
             }
         }
 
-
-        private void CbTicketsParaResponder_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void cbTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
+            cbSubtipoProblema.Items.Clear();
+
+            var tipoSelecionado = (cbTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+            if (tipoSelecionado == "Hardware")
             {
-            
-                txtResposta.Text = ticketSelecionado.DetalhesTecnico;
+                cbSubtipoProblema.Items.Add("Disco rígido");
+                cbSubtipoProblema.Items.Add("Placa mãe");
+                cbSubtipoProblema.Items.Add("RAM");
+                cbSubtipoProblema.Items.Add("Monitor");
             }
-            else
+            else if (tipoSelecionado == "Software")
             {
-                txtResposta.Clear();
+                cbSubtipoProblema.Items.Add("Sistema operativo");
+                cbSubtipoProblema.Items.Add("Aplicação interna");
+                cbSubtipoProblema.Items.Add("Licença");
+                cbSubtipoProblema.Items.Add("Erro de atualização");
             }
         }
 
-        private void BtnResponder_Click(object sender, RoutedEventArgs e)
+        private void BtnCriarTicket_Click(object sender, RoutedEventArgs e)
         {
-            if (cbTicketsParaResponder.SelectedItem is Ticket ticketSelecionado)
-            {
-                ticketSelecionado.DetalhesTecnico = txtResposta.Text;
-             
-                
-
-                try
-                {
-                    TicketDAL.ResponderTicket(ticketSelecionado);
-                    MessageBox.Show("Resposta atualizada com sucesso!");
-                    CarregarTicketsParaResponder(); 
-                    txtResposta.Clear();
-                    cbTicketsParaResponder.SelectedIndex = -1;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Erro ao atualizar resposta: " + ex.Message);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Selecione um ticket para responder.");
-            }
+            MainMenuGrid.Visibility = Visibility.Collapsed;
+            CriarTicketGrid.Visibility = Visibility.Visible;
         }
+
+        private void BtnVerTickets_Click(object sender, RoutedEventArgs e)
+        {
+            MainMenuGrid.Visibility = Visibility.Collapsed;
+            VerTicketsGrid.Visibility = Visibility.Visible;
+            CarregarTicketsSubmetidos(); // para garantir que atualiza sempre
+        }
+
+        private void BtnVoltar_Click(object sender, RoutedEventArgs e)
+        {
+            CriarTicketGrid.Visibility = Visibility.Collapsed;
+            VerTicketsGrid.Visibility = Visibility.Collapsed;
+            MainMenuGrid.Visibility = Visibility.Visible;
+        }
+
+        private void BtnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Show();
+            this.Close(); // Fecha a janela atual (UserTickets)
+        }
+
+
+
+
     }
 }

@@ -51,9 +51,11 @@ namespace UI.ViewModels
 
 
         public ICommand ResponderCommand { get; }
+        private Utilizador _tecnicoLogado;
 
-        public ResponderTicketsViewModel()
+        public ResponderTicketsViewModel(Utilizador tecnico)
         {
+            _tecnicoLogado = tecnico;
             FiltroTipo = "Todos";
             FiltroPrioridade = "Todos";
             CarregarTickets();
@@ -71,22 +73,54 @@ namespace UI.ViewModels
 
             string tipo = FiltroTipo == "Todos" ? null : FiltroTipo;
             string prioridade = FiltroPrioridade == "Todos" ? null : FiltroPrioridade;
+            string estadoTicket = FiltroEstadoTicket == "Todos" ? null : FiltroEstadoTicket;
+            string estadoAtendimento = FiltroEstadoAtendimento == "Todos" ? null : FiltroEstadoAtendimento;
 
-            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade);
+            var lista = TicketDAL.ObterTicketsPorAtender(tipo, prioridade, estadoTicket, estadoAtendimento, _tecnicoLogado.Id);
+
+
+
             foreach (var ticket in lista)
             {
                 Tickets.Add(ticket);
             }
         }
 
+
         private void ResponderTicket()
         {
             if (TicketSelecionado == null) return;
 
-            var janela = new ResponderTicketDetalhes(TicketSelecionado);
+            
+            var janela = new ResponderTicketDetalhes(TicketSelecionado, _tecnicoLogado);
+            // passa o técnico como segundo parâmetro
             janela.ShowDialog();
 
-            CarregarTickets(); 
+            CarregarTickets();
+        }
+
+        private string _filtroEstadoTicket = "Todos";
+        public string FiltroEstadoTicket
+        {
+            get => _filtroEstadoTicket;
+            set
+            {
+                _filtroEstadoTicket = value;
+                OnPropertyChanged(nameof(FiltroEstadoTicket));
+                CarregarTickets();
+            }
+        }
+
+        private string _filtroEstadoAtendimento = "Todos";
+        public string FiltroEstadoAtendimento
+        {
+            get => _filtroEstadoAtendimento;
+            set
+            {
+                _filtroEstadoAtendimento = value;
+                OnPropertyChanged(nameof(FiltroEstadoAtendimento));
+                CarregarTickets();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

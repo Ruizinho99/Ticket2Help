@@ -2,34 +2,69 @@
 using DAL;
 using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace UI.Views
 {
     public partial class ResponderTicketDetalhes : Window
     {
         private Ticket _ticket;
+        private Utilizador _tecnicoLogado;
 
-        public ResponderTicketDetalhes(Ticket ticket)
+        public ResponderTicketDetalhes(Ticket ticket, Utilizador tecnicoLogado)
         {
             InitializeComponent();
             _ticket = ticket;
+            _tecnicoLogado = tecnicoLogado;
+
+            // Seleciona o estado atual no ComboBox
+            foreach (ComboBoxItem item in cmbEstadoTicket.Items)
+            {
+                if ((string)item.Content == _ticket.EstadoTicket)
+                {
+                    cmbEstadoTicket.SelectedItem = item;
+                    break;
+                }
+            }
         }
+
+
 
         private void Guardar_Click(object sender, RoutedEventArgs e)
         {
+            string estadoSelecionado = (cmbEstadoTicket.SelectedItem as ComboBoxItem)?.Content.ToString();
             string resposta = txtResposta.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(resposta))
+            // Se o estado for "atendido", a resposta é obrigatória
+            if (estadoSelecionado == "atendido" && string.IsNullOrWhiteSpace(resposta))
             {
                 MessageBox.Show("Por favor, insira uma resposta antes de guardar.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            // Atualiza o ticket no banco de dados
+            _ticket.EstadoTicket = estadoSelecionado;
             _ticket.DetalhesTecnico = resposta;
-            _ticket.EstadoTicket = "respondido";
-            _ticket.EstadoAtendimento = "concluido";
-            _ticket.DataAtendimento = DateTime.Now;
+
+            if (estadoSelecionado == "porAtender")
+            {
+                // Não altera datas
+            }
+            else if (estadoSelecionado == "emAtendimento")
+            {
+                _ticket.DataAtendimento = DateTime.Now;
+                _ticket.DataConclusao = null;  // reseta caso tenha tido valor
+                _ticket.RespondidoPor = _tecnicoLogado.Id;
+            }
+            else if (estadoSelecionado == "atendido")
+            {
+                if (!_ticket.DataAtendimento.HasValue)
+                {
+                    // Caso não tenha sido setada ainda a data de atendimento, setar agora
+                    _ticket.DataAtendimento = DateTime.Now;
+                }
+                _ticket.DataConclusao = DateTime.Now;
+                _ticket.RespondidoPor = _tecnicoLogado.Id;
+            }
 
             TicketDAL.ResponderTicket(_ticket);
 
@@ -37,9 +72,13 @@ namespace UI.Views
             this.Close();
         }
 
+
+
+
         private void Cancelar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
     }
+
 }

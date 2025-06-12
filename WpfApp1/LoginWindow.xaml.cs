@@ -29,11 +29,19 @@ namespace UI
         {
             try
             {
-                Utilizador user = UtilizadorDAL.GetPrimeiroUtilizador();
+                var exemplos = UtilizadorDAL.GetUtilizadoresExemplo();
 
-                if (user != null)
+                if (exemplos.itDesk != null || exemplos.funcionario != null)
                 {
-                    txtCredenciaisExemplo.Text = $"Exemplo:\nUsername: {user.Username}\nPassword: {user.Password}";
+                    string texto = "Exemplos:\n";
+
+                    if (exemplos.itDesk != null)
+                        texto += $"[IT_DESK] Username: {exemplos.itDesk.Username}, Password: {exemplos.itDesk.Password}\n";
+
+                    if (exemplos.funcionario != null)
+                        texto += $"[FUNCIONARIO] Username: {exemplos.funcionario.Username}, Password: {exemplos.funcionario.Password}";
+
+                    txtCredenciaisExemplo.Text = texto;
                 }
                 else
                 {
@@ -42,9 +50,10 @@ namespace UI
             }
             catch (Exception ex)
             {
-                txtCredenciaisExemplo.Text = $"Erro ao carregar utilizador: {ex.Message}";
+                txtCredenciaisExemplo.Text = $"Erro ao carregar utilizadores: {ex.Message}";
             }
         }
+
 
 
         private void BtnEntrar_Click(object sender, RoutedEventArgs e)
