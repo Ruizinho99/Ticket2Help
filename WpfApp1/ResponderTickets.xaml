@@ -20,66 +20,90 @@
 
             <!-- RESPOSTA A TICKETS -->
             <StackPanel x:Name="ResponderSection" Visibility="Collapsed">
-                <GroupBox Header="Filtros de Pesquisa" Margin="0,0,0,10" Padding="10">
-                    <StackPanel Orientation="Vertical" Margin="10">
-                        <WrapPanel Margin="0,0,0,10">
-                            <TextBlock Text="Tipo:" Width="80" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroTipo}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>Hardware</sys:String>
-                                        <sys:String>Software</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
-                            </ComboBox>
 
-                            <TextBlock Text="Prioridade:" Width="80" Margin="20,0,0,0" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroPrioridade}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>Baixa</sys:String>
-                                        <sys:String>Média</sys:String>
-                                        <sys:String>Alta</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
-                            </ComboBox>
+                <!-- Filtros Modernos -->
+                <Border Background="#f5f5f5" Padding="10" CornerRadius="6" Margin="0,0,0,10">
+                    <DockPanel>
+
+                        <!-- Botão à direita -->
+                        <Button Content="Aplicar Filtros"
+                    Width="150"
+                    Height="30"            
+                    Background="#274360"
+                    Foreground="White"
+                    BorderBrush="#274360"
+                    Click="BtnAplicarFiltros_Click"
+                    DockPanel.Dock="Right"
+                    Margin="10,0,0,0"/>
+
+                        <!-- Filtros à esquerda -->
+                        <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Left" ItemHeight="35" ItemWidth="170">
+
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="Tipo" FontWeight="Bold" FontSize="12"/>
+                                <ComboBox Width="150" Height="30" SelectedItem="{Binding FiltroTipo}" Padding="5" Background="White" BorderBrush="#ccc" BorderThickness="1">
+                                    <ComboBox.ItemsSource>
+                                        <x:Array Type="{x:Type sys:String}">
+                                            <sys:String>Todos</sys:String>
+                                            <sys:String>Hardware</sys:String>
+                                            <sys:String>Software</sys:String>
+                                        </x:Array>
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="Prioridade" FontWeight="Bold" FontSize="12"/>
+                                <ComboBox Width="150" Height="30" SelectedItem="{Binding FiltroPrioridade}" Padding="5" Background="White" BorderBrush="#ccc" BorderThickness="1">
+                                    <ComboBox.ItemsSource>
+                                        <x:Array Type="{x:Type sys:String}">
+                                            <sys:String>Todos</sys:String>
+                                            <sys:String>Baixa</sys:String>
+                                            <sys:String>Média</sys:String>
+                                            <sys:String>Alta</sys:String>
+                                        </x:Array>
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="Estado Ticket" FontWeight="Bold" FontSize="12"/>
+                                <ComboBox Width="150" Height="30" SelectedItem="{Binding FiltroEstadoTicket}" Padding="5" Background="White" BorderBrush="#ccc" BorderThickness="1">
+                                    <ComboBox.ItemsSource>
+                                        <x:Array Type="{x:Type sys:String}">
+                                            <sys:String>Todos</sys:String>
+                                            <sys:String>porAtender</sys:String>
+                                            <sys:String>emAtendimento</sys:String>
+                                            <sys:String>atendido</sys:String>
+                                        </x:Array>
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Margin="0,0,10,0">
+                                <TextBlock Text="Estado Atendimento" FontWeight="Bold" FontSize="12"/>
+                                <ComboBox Width="150" Height="30" SelectedItem="{Binding FiltroEstadoAtendimento}" Padding="5" Background="White" BorderBrush="#ccc" BorderThickness="1">
+                                    <ComboBox.ItemsSource>
+                                        <x:Array Type="{x:Type sys:String}">
+                                            <sys:String>Todos</sys:String>
+                                            <sys:String>aberto</sys:String>
+                                            <sys:String>naoResolvido</sys:String>
+                                            <sys:String>resolvido</sys:String>
+                                        </x:Array>
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
+                            </StackPanel>
+
                         </WrapPanel>
+                    </DockPanel>
+                </Border>
 
-                        <WrapPanel Margin="0,0,0,10">
-                            <TextBlock Text="Estado Ticket:" Width="80" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroEstadoTicket}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>porAtender</sys:String>
-                                        <sys:String>emAtendimento</sys:String>
-                                        <sys:String>atendido</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
-                            </ComboBox>
-
-                            <TextBlock Text="Estado Atendimento:" Width="130" Margin="20,0,0,0" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroEstadoAtendimento}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>aberto</sys:String>
-                                        <sys:String>naoResolvido</sys:String>
-                                        <sys:String>resolvido</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
-                            </ComboBox>
-                        </WrapPanel>
-
-                        <Button Content="Aplicar Filtros" Width="150" Background="#274360" Foreground="White" BorderBrush="#274360" HorizontalAlignment="Left" Click="BtnAplicarFiltros_Click"/>
-                    </StackPanel>
-                </GroupBox>
-
+                <!-- Tabela de Tickets -->
                 <DataGrid ItemsSource="{Binding Tickets}"
-                          SelectedItem="{Binding TicketSelecionado, Mode=TwoWay}"
-                          AutoGenerateColumns="False" Height="300" Margin="0,0,0,10">
+              SelectedItem="{Binding TicketSelecionado, Mode=TwoWay}"
+              AutoGenerateColumns="False"
+              Height="300"
+              Margin="0,0,0,10">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="40"/>
                         <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="100"/>
@@ -96,11 +120,21 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
+                <!-- Botões -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Responder Ticket" Width="150" Margin="0,0,10,0" Command="{Binding ResponderCommand}" Background="#274360" Foreground="White" BorderBrush="#274360"/>
-                    <Button Content="Voltar" Width="100" Click="BtnVoltar_Click"/>
+                    <Button Content="Responder Ticket"
+                Width="150"
+                Margin="0,0,10,0"
+                Command="{Binding ResponderCommand}"
+                Background="#274360"
+                Foreground="White"
+                BorderBrush="#274360"/>
+                    <Button Content="Voltar"
+                Width="100"
+                Click="BtnVoltar_Click"/>
                 </StackPanel>
             </StackPanel>
+
 
             <!-- MAPA/ESTATÍSTICAS -->
             <StackPanel x:Name="MapaSection" Visibility="Collapsed" Margin="10">

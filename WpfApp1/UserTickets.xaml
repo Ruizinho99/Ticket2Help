@@ -52,6 +52,7 @@
             </Grid>
 
             <!-- Página Ver Tickets -->
+            <!-- Página Ver Tickets -->
             <Grid x:Name="VerTicketsGrid" Visibility="Collapsed" Margin="10">
                 <StackPanel Orientation="Vertical">
 
@@ -72,9 +73,6 @@
                                 <ComboBoxItem Content="Média"/>
                                 <ComboBoxItem Content="Baixa"/>
                             </ComboBox>
-                        </WrapPanel>
-
-                        <WrapPanel>
                             <TextBlock Text="Estado:" VerticalAlignment="Center" Margin="0,0,5,0"/>
                             <ComboBox x:Name="cbFiltroEstado" Width="100" Margin="0,0,10,0">
                                 <ComboBoxItem Content="Todos" IsSelected="True"/>
@@ -92,26 +90,62 @@
                             </ComboBox>
 
                             <Button Content="Aplicar Filtros" Click="BtnAplicarFiltros_Click" Width="120"
-                                    Background="#274360" Foreground="White" BorderBrush="#274360"/>
+                             Background="#274360" Foreground="White" BorderBrush="#274360"/>
+
                         </WrapPanel>
+
                     </StackPanel>
 
-                    <DataGrid x:Name="dgTickets"
-                              AutoGenerateColumns="False"
-                              IsReadOnly="True"
-                              Height="300"
-                              MouseDoubleClick="dgTickets_MouseDoubleClick"
-                              Margin="0,0,0,10">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                            <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                            <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="*"/>
-                            <DataGridTextColumn Header="Estado" Binding="{Binding EstadoTicket}" Width="*"/>
-                            <DataGridTextColumn Header="Criado em" Binding="{Binding DataCriacao}" Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <!-- Lista de Tickets -->
+                    <ScrollViewer Height="400">
+                        <ItemsControl x:Name="icTickets" Margin="0,0,0,10">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#f9f9f9"
+                CornerRadius="8"
+                BorderBrush="#ccc"
+                BorderThickness="1"
+                Padding="15"
+                Margin="0,0,0,10"
+                Height="80">
+                                        <DockPanel LastChildFill="False" VerticalAlignment="Center">
+                                            <!-- Informações do ticket -->
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Left" VerticalAlignment="Center">
+                                                <TextBlock Text="ID: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Id}" Margin="0,0,15,0"/>
 
-                    <Button Content="← Voltar" Click="BtnVoltar_Click" Width="100"/>
+                                                <TextBlock Text="Tipo: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Tipo}" Margin="0,0,15,0"/>
+
+                                                <TextBlock Text="Prioridade: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding Prioridade}" Margin="0,0,15,0"/>
+
+                                                <TextBlock Text="Estado: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding EstadoTicket}" Margin="0,0,15,0"/>
+
+                                                <TextBlock Text="Criado em: " FontWeight="Bold" Margin="0,0,5,0"/>
+                                                <TextBlock Text="{Binding DataCriacao, StringFormat=dd/MM/yyyy HH:mm}"/>
+                                            </StackPanel>
+
+                                            <!-- Botão à direita -->
+                                            <Button Content="Ver Detalhes"
+                        Background="#274360"
+                        Foreground="White"
+                        BorderBrush="#274360"
+                        Padding="5"
+                        Width="120"
+                        VerticalAlignment="Center"
+                        Click="BtnVerDetalhes_Click"
+                        DockPanel.Dock="Right"/>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <Button Content="← Voltar" Click="BtnVoltar_Click" Width="100" HorizontalAlignment="Right"/>
                 </StackPanel>
             </Grid>
         </Grid>
