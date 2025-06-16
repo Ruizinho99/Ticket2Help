@@ -6,11 +6,23 @@ using System.Windows.Controls;
 
 namespace UI.Views
 {
+    /**
+     * @class ResponderTicketDetalhes
+     * @brief Janela para exibir detalhes de um ticket e permitir responder e alterar seu estado.
+     */
     public partial class ResponderTicketDetalhes : Window
     {
-        private Ticket _ticket;
-        private Utilizador _tecnicoLogado;
+        private Ticket _ticket;           /**< Ticket que será visualizado e editado */
+        private Utilizador _tecnicoLogado; /**< Técnico que está respondendo o ticket */
 
+        /**
+         * @brief Construtor da janela ResponderTicketDetalhes.
+         * Inicializa a interface e configura o ticket e técnico logado.
+         * Seleciona o estado atual do ticket no ComboBox.
+         * 
+         * @param ticket Ticket a ser exibido e modificado.
+         * @param tecnicoLogado Técnico que está respondendo ao ticket.
+         */
         public ResponderTicketDetalhes(Ticket ticket, Utilizador tecnicoLogado)
         {
             InitializeComponent();
@@ -28,8 +40,15 @@ namespace UI.Views
             }
         }
 
-
-
+        /**
+         * @brief Evento disparado ao clicar no botão "Guardar".
+         * Valida a resposta se o estado for "atendido" e atualiza o ticket no banco.
+         * Define datas de atendimento/conclusão conforme o estado selecionado.
+         * Fecha a janela após salvar.
+         * 
+         * @param sender Objeto que disparou o evento.
+         * @param e Argumentos do evento.
+         */
         private void Guardar_Click(object sender, RoutedEventArgs e)
         {
             string estadoSelecionado = (cmbEstadoTicket.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -72,13 +91,16 @@ namespace UI.Views
             this.Close();
         }
 
-
-
-
+        /**
+         * @brief Evento disparado ao clicar no botão "Cancelar".
+         * Fecha a janela sem salvar alterações.
+         * 
+         * @param sender Objeto que disparou o evento.
+         * @param e Argumentos do evento.
+         */
         private void Cancelar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
     }
-
 }

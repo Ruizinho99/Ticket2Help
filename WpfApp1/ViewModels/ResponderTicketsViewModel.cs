@@ -10,16 +10,33 @@ using UI.Views;
 
 namespace UI.ViewModels
 {
+    /**
+     * @class ResponderTicketsViewModel
+     * @brief ViewModel responsável por gerenciar a interface de resposta a tickets.
+     * 
+     * Controla a lista de tickets, os filtros aplicados e a lógica para responder tickets.
+     */
     public class ResponderTicketsViewModel : INotifyPropertyChanged
     {
+        /** Lista observável de tickets filtrados para exibição */
         public ObservableCollection<Ticket> Tickets { get; set; } = new ObservableCollection<Ticket>();
-        private List<Ticket> TodosOsTickets = new List<Ticket>(); // Lista completa carregada
 
+        /** Lista completa de tickets carregada do banco */
+        private List<Ticket> TodosOsTickets = new List<Ticket>();
+
+        /** Coleção de tipos de ticket para filtro */
         public ObservableCollection<string> Tipos { get; set; } = new ObservableCollection<string> { "Todos", "Hardware", "Software" };
+
+        /** Coleção de prioridades para filtro */
         public ObservableCollection<string> Prioridades { get; set; } = new ObservableCollection<string> { "Todos", "Baixa", "Média", "Alta" };
+
+        /** Coleção de estados do ticket para filtro */
         public ObservableCollection<string> EstadosTicket { get; set; } = new ObservableCollection<string> { "Todos", "porAtender", "emAtendimento", "atendido" };
+
+        /** Coleção de estados de atendimento para filtro */
         public ObservableCollection<string> EstadosAtendimento { get; set; } = new ObservableCollection<string> { "Todos", "aberto", "naoResolvido", "resolvido" };
 
+        /** Filtro aplicado ao tipo do ticket */
         private string _filtroTipo = "Todos";
         public string FiltroTipo
         {
@@ -32,6 +49,7 @@ namespace UI.ViewModels
             }
         }
 
+        /** Filtro aplicado à prioridade do ticket */
         private string _filtroPrioridade = "Todos";
         public string FiltroPrioridade
         {
@@ -44,6 +62,7 @@ namespace UI.ViewModels
             }
         }
 
+        /** Filtro aplicado ao estado do ticket */
         private string _filtroEstadoTicket = "Todos";
         public string FiltroEstadoTicket
         {
@@ -56,6 +75,7 @@ namespace UI.ViewModels
             }
         }
 
+        /** Filtro aplicado ao estado de atendimento */
         private string _filtroEstadoAtendimento = "Todos";
         public string FiltroEstadoAtendimento
         {
@@ -68,6 +88,7 @@ namespace UI.ViewModels
             }
         }
 
+        /** Ticket atualmente selecionado na interface */
         private Ticket _ticketSelecionado;
         public Ticket TicketSelecionado
         {
@@ -76,14 +97,21 @@ namespace UI.ViewModels
             {
                 _ticketSelecionado = value;
                 OnPropertyChanged(nameof(TicketSelecionado));
-                CommandManager.InvalidateRequerySuggested();
+                CommandManager.InvalidateRequerySuggested(); ///< Atualiza o estado do comando
             }
         }
 
+        /** Comando para responder um ticket selecionado */
         public ICommand ResponderCommand { get; }
 
+        /** Usuário técnico atualmente logado */
         private Utilizador _tecnicoLogado;
 
+        /**
+         * @brief Construtor que inicializa o ViewModel com o técnico logado.
+         * 
+         * @param tecnico Usuário técnico autenticado.
+         */
         public ResponderTicketsViewModel(Utilizador tecnico)
         {
             _tecnicoLogado = tecnico;
@@ -96,14 +124,20 @@ namespace UI.ViewModels
             CarregarTickets();
         }
 
+        /**
+         * @brief Carrega todos os tickets do banco e aplica os filtros atuais.
+         */
         public void CarregarTickets()
         {
-            // Carrega todos os tickets uma única vez
+            // Carrega todos os tickets que estão por atender para o técnico logado
             TodosOsTickets = TicketDAL.ObterTicketsPorAtender(null, null, null, null, _tecnicoLogado.Id).ToList();
 
-            AplicarFiltros(); // Aplica os filtros atuais
+            AplicarFiltros();
         }
 
+        /**
+         * @brief Aplica os filtros selecionados à lista completa de tickets e atualiza a coleção observável.
+         */
         public void AplicarFiltros()
         {
             var ticketsFiltrados = TodosOsTickets.AsEnumerable();
@@ -127,6 +161,9 @@ namespace UI.ViewModels
             }
         }
 
+        /**
+         * @brief Abre a janela para responder ao ticket selecionado e atualiza a lista após resposta.
+         */
         private void ResponderTicket()
         {
             if (TicketSelecionado == null) return;
@@ -137,7 +174,13 @@ namespace UI.ViewModels
             CarregarTickets(); // Atualiza a lista após responder
         }
 
+        /// Evento para notificação de mudanças nas propriedades
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /**
+         * @brief Dispara o evento PropertyChanged para atualizar a interface.
+         * @param nome Nome da propriedade que mudou.
+         */
         protected void OnPropertyChanged(string nome) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nome));
     }
 }
