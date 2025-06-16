@@ -25,7 +25,6 @@ namespace UI.Views
                 utilizador.Id, "Todos", "Todos", "Todos", "Todos");
 
             DataContext = ViewModel;
-            // ou cria contextos separados para cada secção
         }
 
         private void AbrirJanelaResponderTicket(Ticket ticket)
@@ -37,14 +36,16 @@ namespace UI.Views
             janela.ShowDialog();
         }
 
-        private void BtnResponderTickets_Click(object sender, RoutedEventArgs e)
+        // Método do botão dentro do DataGrid para responder ticket
+        private void BtnResponder_Click(object sender, RoutedEventArgs e)
         {
-            MainMenu.Visibility = Visibility.Collapsed;
-            MapaSection.Visibility = Visibility.Collapsed;
-            ResponderSection.Visibility = Visibility.Visible;
+            var button = sender as Button;
+            if (button == null) return;
 
-            // Atualiza o DataContext para a seção responder
-            ResponderSection.DataContext = ViewModel;
+            var ticket = button.DataContext as Ticket;
+            if (ticket == null) return;
+
+            AbrirJanelaResponderTicket(ticket);
         }
 
         private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
@@ -62,7 +63,6 @@ namespace UI.Views
             MainMenu.Visibility = Visibility.Collapsed;
             MapaSection.Visibility = Visibility.Visible;
 
-            // Aqui mudas o DataContext desta secção
             MapaSection.DataContext = EstatisticasVM;
         }
 
@@ -81,4 +81,3 @@ namespace UI.Views
         }
     }
 }
-

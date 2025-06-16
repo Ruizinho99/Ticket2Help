@@ -113,7 +113,7 @@ public class AdminTicketsViewModel : INotifyPropertyChanged
         AplicarFiltros();
     }
 
-    private void AplicarFiltros()
+    public void AplicarFiltros()
     {
         // Converte "Todos" para null para passar ao DAL
         string tipo = FiltroTipo == "Todos" ? null : FiltroTipo;

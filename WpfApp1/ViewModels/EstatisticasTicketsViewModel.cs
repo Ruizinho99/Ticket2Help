@@ -101,7 +101,10 @@ public class EstatisticasTicketsViewModel : INotifyPropertyChanged
             return total == 0 ? "0%" : $"{(TicketsResolvidos * 100.0 / total):N2}%";
         }
     }
-
+    public void AtualizarEstatisticas()
+    {
+        CarregarEstatisticas();
+    }
     public List<TempoAtendimentoPorTipo> MediaTempoAtendimentoPorTipoLista { get; set; }
 
     public EstatisticasTicketsViewModel(
@@ -125,7 +128,7 @@ public class EstatisticasTicketsViewModel : INotifyPropertyChanged
         CarregarEstatisticas();
     }
 
-    private void CarregarEstatisticas()
+    public void CarregarEstatisticas()
     {
         var tickets = TicketDAL.ObterTicketsEstatisticas(
             TipoFiltro, PrioridadeFiltro, EstadoTicketFiltro, EstadoAtendimentoFiltro,

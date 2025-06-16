@@ -101,12 +101,24 @@
                 <StackPanel>
                     <!-- Tabela de Tickets -->
                     <DataGrid ItemsSource="{Binding Tickets}"
-                              SelectedItem="{Binding TicketSelecionado, Mode=TwoWay}"
-                              AutoGenerateColumns="False"
-                              Height="300"
-                              Margin="0,0,0,10"
-                              Focusable="False">
+          SelectedItem="{Binding TicketSelecionado, Mode=TwoWay}"
+          AutoGenerateColumns="False"
+          Height="300"
+          Margin="0,0,0,10"
+          Focusable="False">
                         <DataGrid.Columns>
+                            <!-- Coluna do botão Responder -->
+                            <DataGridTemplateColumn Header="Responder" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Responder"
+                            Width="70"
+                            Height="25"
+                            Click="BtnResponder_Click" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
                             <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="40"/>
                             <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="100"/>
                             <DataGridTextColumn Header="Subtipo" Binding="{Binding SubtipoProblema}" Width="100"/>
@@ -122,11 +134,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Button Content="Responder Ticket"
-                            Command="{Binding ResponderCommand}"
-                            Margin="0,0,0,10"
-                            Width="150"
-                            Height="30" />
+
 
                 </StackPanel>
 
