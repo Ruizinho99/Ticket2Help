@@ -4,8 +4,17 @@ using BLL;
 
 namespace DAL
 {
+    /// <summary>
+    /// Classe responsável pelas operações de acesso a dados relacionadas aos utilizadores.
+    /// </summary>
     public class UtilizadorDAL
     {
+        /// <summary>
+        /// Autentica um utilizador com base no username e password.
+        /// </summary>
+        /// <param name="username">Nome de utilizador fornecido.</param>
+        /// <param name="password">Password fornecida.</param>
+        /// <returns>Objeto Utilizador autenticado ou null se não for encontrado.</returns>
         public static Utilizador Login(string username, string password)
         {
             using (SqlConnection conn = Database.GetConnection())
@@ -32,6 +41,10 @@ namespace DAL
             return null;
         }
 
+        /// <summary>
+        /// Obtém o primeiro utilizador da tabela Utilizador.
+        /// </summary>
+        /// <returns>Objeto Utilizador encontrado ou null se não existir nenhum.</returns>
         public static Utilizador GetPrimeiroUtilizador()
         {
             using (SqlConnection conn = Database.GetConnection())
@@ -58,6 +71,10 @@ namespace DAL
             return null;
         }
 
+        /// <summary>
+        /// Obtém dois utilizadores de exemplo: um com perfil IT_DESK e outro com perfil Funcionario.
+        /// </summary>
+        /// <returns>Uma tupla contendo os utilizadores IT_DESK e Funcionario encontrados, ou null se não existirem.</returns>
         public static (Utilizador itDesk, Utilizador funcionario) GetUtilizadoresExemplo()
         {
             Utilizador itDesk = null;
@@ -98,13 +115,18 @@ namespace DAL
                     }
 
                     if (itDesk != null && funcionario != null)
-                        break; // Já temos os dois exemplos
+                        break; // Já encontrou os dois utilizadores necessários
                 }
             }
 
             return (itDesk, funcionario);
         }
 
+        /// <summary>
+        /// Obtém um utilizador com base no seu ID.
+        /// </summary>
+        /// <param name="id">ID do utilizador.</param>
+        /// <returns>Objeto Utilizador correspondente ao ID ou null se não existir.</returns>
         public static Utilizador ObterUtilizadorPorId(int id)
         {
             using (SqlConnection conn = Database.GetConnection())
@@ -131,6 +153,5 @@ namespace DAL
 
             return null;
         }
-
     }
 }

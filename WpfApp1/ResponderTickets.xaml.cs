@@ -7,10 +7,21 @@ using System.Windows.Controls;
 
 namespace UI.Views
 {
+    /**
+     * @class ResponderTickets
+     * @brief Janela para listar e gerenciar tickets que o utilizador pode responder.
+     * Permite aplicar filtros, ordenar, responder tickets, visualizar mapas e efetuar logout.
+     */
     public partial class ResponderTickets : Window
     {
-        private Utilizador _utilizador;
+        private Utilizador _utilizador; /**< Utilizador logado que está respondendo aos tickets */
 
+        /**
+         * @brief Construtor da janela ResponderTickets.
+         * Inicializa a interface e carrega os tickets do utilizador sem filtros.
+         * 
+         * @param utilizador Utilizador logado.
+         */
         public ResponderTickets(Utilizador utilizador)
         {
             InitializeComponent();
@@ -20,6 +31,17 @@ namespace UI.Views
             CarregarTicketsParaResponder();
         }
 
+        /**
+         * @brief Carrega os tickets para responder aplicando filtros e ordenação.
+         * 
+         * @param tipoFiltro Tipo do ticket (ex: "Hardware", "Software" ou "Todos").
+         * @param prioridadeFiltro Prioridade do ticket (ex: "Baixa", "Média", "Alta" ou "Todos").
+         * @param estadoTicketFiltro Estado do ticket (ex: "porAtender", "emAtendimento", "atendido" ou "Todos").
+         * @param estadoAtendimentoFiltro Estado do atendimento (ex: "aberto", "resolvido", "naoResolvido" ou "Todos").
+         * @param dataInicio Data inicial para filtro por data de criação (opcional).
+         * @param dataFim Data final para filtro por data de criação (opcional).
+         * @param ordenarPor Critério para ordenação dos tickets (ex: "ID Ascendente", "Data Descendente").
+         */
         private void CarregarTicketsParaResponder(
             string tipoFiltro = "Todos",
             string prioridadeFiltro = "Todos",
@@ -59,9 +81,13 @@ namespace UI.Views
                     break;
             }
 
-            dgTicketsResponder.ItemsSource = tickets; // Seu DataGrid de tickets para responder
+            dgTicketsResponder.ItemsSource = tickets; ///< Atualiza o DataGrid com a lista de tickets
         }
 
+        /**
+         * @brief Evento do botão para aplicar filtros e atualizar a lista de tickets.
+         * Obtém os filtros da interface e chama CarregarTicketsParaResponder.
+         */
         private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
         {
             string tipoFiltro = (cbFiltroTipo.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Todos";
@@ -83,12 +109,19 @@ namespace UI.Views
                 ordenarPor);
         }
 
+        /**
+         * @brief Evento do botão para mostrar a seção de responder tickets.
+         * Oculta o menu principal e exibe a seção de resposta.
+         */
         private void BtnResponderTickets_Click(object sender, RoutedEventArgs e)
         {
             MainMenu.Visibility = Visibility.Collapsed;
             ResponderSection.Visibility = Visibility.Visible;
         }
 
+        /**
+         * @brief Evento do botão para abrir a janela de mapas.
+         */
         private void BtnVerMapas_Click(object sender, RoutedEventArgs e)
         {
             var janelaMapas = new Mapas(_utilizador.Id);
@@ -96,13 +129,21 @@ namespace UI.Views
             janelaMapas.Show();
         }
 
-
-
+        /**
+         * @brief Evento do botão para voltar ao menu principal.
+         * Oculta a seção de resposta e exibe o menu principal.
+         */
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
             ResponderSection.Visibility = Visibility.Collapsed;
             MainMenu.Visibility = Visibility.Visible;
         }
+
+        /**
+         * @brief Evento de duplo clique no DataGrid de tickets.
+         * Abre a janela para responder ao ticket selecionado.
+         * Atualiza a lista após fechamento da janela.
+         */
         private void dgTicketsResponder_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var ticketSelecionado = dgTicketsResponder.SelectedItem as Ticket;
@@ -121,7 +162,10 @@ namespace UI.Views
             BtnAplicarFiltros_Click(null, null);
         }
 
-
+        /**
+         * @brief Evento do botão para fazer logout.
+         * Fecha esta janela e abre a janela de login.
+         */
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             var loginWindow = new LoginWindow();

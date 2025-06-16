@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{F0EE97E9-0040-4F24-AC26-B445246F5F70}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticket2Help.Tests", "Ticket2Help.Tests\Ticket2Help.Tests.csproj", "{8DFC5976-6FF9-460D-B51C-B5D5F851AC3E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F0EE97E9-0040-4F24-AC26-B445246F5F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0EE97E9-0040-4F24-AC26-B445246F5F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0EE97E9-0040-4F24-AC26-B445246F5F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DFC5976-6FF9-460D-B51C-B5D5F851AC3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DFC5976-6FF9-460D-B51C-B5D5F851AC3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DFC5976-6FF9-460D-B51C-B5D5F851AC3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DFC5976-6FF9-460D-B51C-B5D5F851AC3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
