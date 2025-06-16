@@ -137,5 +137,5 @@
                     Style="{StaticResource BlueButtonStyle}"
                     Click="BtnEntrar_Click"/>
         </StackPanel>
-    </Grid>
+    </Border>
 </Window>

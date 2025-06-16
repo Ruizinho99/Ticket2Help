@@ -107,23 +107,16 @@
                        HorizontalAlignment="Center"
                        AutomationProperties.Name="Título da página"/>
 
-            <GroupBox Header="Informações Gerais" Margin="0,0,0,15">
-                <Grid Margin="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="180"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+            <!-- Informações Gerais -->
+            <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,20" BorderBrush="#ccc" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="Informações Gerais" FontWeight="Bold" FontSize="16" Foreground="#2c3e50" Margin="0,0,0,10"/>
+                    <UniformGrid Columns="2" Rows="8" Margin="0,0,0,10">
+                        <TextBlock Text="ID:" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Id}"/>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        <TextBlock Text="Tipo:" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Tipo}"/>
 
                     <TextBlock Text="ID:" Style="{StaticResource LabelTextBlock}" Grid.Row="0" Grid.Column="0"/>
                     <TextBlock Text="{Binding Id}" Style="{StaticResource ValueTextBlock}" Grid.Row="0" Grid.Column="1"/>
