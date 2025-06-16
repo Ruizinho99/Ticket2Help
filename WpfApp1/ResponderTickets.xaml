@@ -23,64 +23,63 @@
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <TextBlock Text="Tipo:" Width="80" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroTipo}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>Hardware</sys:String>
-                                        <sys:String>Software</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
+                            <ComboBox x:Name="cbFiltroTipo" Width="120" SelectedIndex="0">
+                                <ComboBoxItem>Todos</ComboBoxItem>
+                                <ComboBoxItem>Hardware</ComboBoxItem>
+                                <ComboBoxItem>Software</ComboBoxItem>
                             </ComboBox>
 
                             <TextBlock Text="Prioridade:" Width="80" Margin="20,0,0,0" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroPrioridade}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>Baixa</sys:String>
-                                        <sys:String>Média</sys:String>
-                                        <sys:String>Alta</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
+                            <ComboBox x:Name="cbFiltroPrioridade" Width="120" SelectedIndex="0">
+                                <ComboBoxItem>Todos</ComboBoxItem>
+                                <ComboBoxItem>Baixa</ComboBoxItem>
+                                <ComboBoxItem>Média</ComboBoxItem>
+                                <ComboBoxItem>Alta</ComboBoxItem>
                             </ComboBox>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <TextBlock Text="Estado Ticket:" Width="80" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroEstadoTicket}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>porAtender</sys:String>
-                                        <sys:String>emAtendimento</sys:String>
-                                        <sys:String>atendido</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
+                            <ComboBox x:Name="cbFiltroEstadoTicket" Width="120" SelectedIndex="0">
+                                <ComboBoxItem>Todos</ComboBoxItem>
+                                <ComboBoxItem>porAtender</ComboBoxItem>
+                                <ComboBoxItem>emAtendimento</ComboBoxItem>
+                                <ComboBoxItem>atendido</ComboBoxItem>
                             </ComboBox>
 
                             <TextBlock Text="Estado Atendimento:" Width="130" Margin="20,0,0,0" VerticalAlignment="Center"/>
-                            <ComboBox Width="120" SelectedItem="{Binding FiltroEstadoAtendimento}">
-                                <ComboBox.ItemsSource>
-                                    <x:Array Type="{x:Type sys:String}">
-                                        <sys:String>Todos</sys:String>
-                                        <sys:String>aberto</sys:String>
-                                        <sys:String>naoResolvido</sys:String>
-                                        <sys:String>resolvido</sys:String>
-                                    </x:Array>
-                                </ComboBox.ItemsSource>
+                            <ComboBox x:Name="cbFiltroEstadoAtendimento" Width="120" SelectedIndex="0">
+                                <ComboBoxItem>Todos</ComboBoxItem>
+                                <ComboBoxItem>aberto</ComboBoxItem>
+                                <ComboBoxItem>naoResolvido</ComboBoxItem>
+                                <ComboBoxItem>resolvido</ComboBoxItem>
                             </ComboBox>
                         </StackPanel>
 
-                        <Button Content="Aplicar Filtros" Width="150" HorizontalAlignment="Left" Click="BtnAplicarFiltros_Click"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Text="Data Início:" Width="80" VerticalAlignment="Center"/>
+                            <DatePicker x:Name="dpDataInicio" Width="120"/>
+
+                            <TextBlock Text="Data Fim:" Width="80" Margin="20,0,0,0" VerticalAlignment="Center"/>
+                            <DatePicker x:Name="dpDataFim" Width="120"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Text="Ordenar Por:" Width="80" VerticalAlignment="Center"/>
+                            <ComboBox x:Name="cbOrdenarPor" Width="180" SelectedIndex="3">
+                                <ComboBoxItem>ID Ascendente</ComboBoxItem>
+                                <ComboBoxItem>ID Descendente</ComboBoxItem>
+                                <ComboBoxItem>Data Ascendente</ComboBoxItem>
+                                <ComboBoxItem>Data Descendente</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <Button Content="Aplicar Filtros" Width="120" HorizontalAlignment="Right" Click="BtnAplicarFiltros_Click" />
                     </StackPanel>
                 </GroupBox>
-
             </StackPanel>
 
-            <DataGrid ItemsSource="{Binding Tickets}" 
-                      SelectedItem="{Binding TicketSelecionado, Mode=TwoWay}"
-                      AutoGenerateColumns="False" Height="300">
+            <DataGrid x:Name="dgTicketsResponder" AutoGenerateColumns="False" Height="300" Margin="0,0,0,10" MouseDoubleClick="dgTicketsResponder_MouseDoubleClick">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="40"/>
                     <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="100"/>
@@ -95,55 +94,14 @@
                     <DataGridTextColumn Header="Funcionário" Binding="{Binding NomeFuncionario}" Width="150"/>
                     <DataGridTextColumn Header="Detalhes Técnico" Binding="{Binding DetalhesTecnico}" Width="200"/>
                 </DataGrid.Columns>
-
-
             </DataGrid>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                <Button Content="Responder Ticket" Width="150" Command="{Binding ResponderCommand}" Margin="0,0,10,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+               
                 <Button Content="Voltar" Width="100" Click="BtnVoltar_Click"/>
             </StackPanel>
         </StackPanel>
 
-        <!-- Mapas / Estatísticas -->
-        <StackPanel x:Name="MapaSection" Visibility="Collapsed" Margin="10">
-            <StackPanel Orientation="Horizontal" Margin="0,10">
-                <TextBlock Text="Data Início:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <DatePicker SelectedDate="{Binding DataInicioFiltro}" Width="120" />
-                <TextBlock Text="Data Fim:" VerticalAlignment="Center" Margin="10,0,5,0"/>
-                <DatePicker SelectedDate="{Binding DataFimFiltro}" Width="120" />
-            </StackPanel>
-
-            <Button Content="Aplicar Filtros" Width="120" Click="BtnAplicarFiltros_Click1" />
-
-            <TextBlock Text="Estatísticas dos Tickets respondidos" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
-
-            <TextBlock Text="{Binding TotalTickets, StringFormat=Total de Tickets: {0}}" FontSize="14" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding TicketsAtendidos, StringFormat=Tickets Atendidos: {0}}" FontSize="14" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding TicketsResolvidos, StringFormat=Tickets Resolvidos: {0}}" FontSize="14" Margin="0,0,0,5"/>
-            <TextBlock Text="{Binding TicketsNaoResolvidos, StringFormat=Tickets Não Resolvidos: {0}}" FontSize="14" Margin="0,0,0,5"/>
-
-            <TextBlock Text="Percentagens:" FontWeight="Bold" Margin="10,15,0,5"/>
-            <TextBlock Text="{Binding PercentualRespondidos, StringFormat=Tickets Respondidos / Total: {0}}" FontSize="14" Margin="0,0,0,2"/>
-            <TextBlock Text="{Binding PercentualResolvidosVsAtendidos, StringFormat=Tickets Resolvidos / Atendidos: {0}}" FontSize="14" Margin="0,0,0,2"/>
-            <TextBlock Text="{Binding PercentualResolvidosVsNaoResolvidos, StringFormat=Tickets Resolvidos / (Resolvidos + Não Resolvidos): {0}}" FontSize="14" Margin="0,0,0,10"/>
-
-            <TextBlock Text="Média de Tempo de Atendimento por Tipo:" FontWeight="Bold" Margin="0,0,0,5"/>
-            <ItemsControl ItemsSource="{Binding MediaTempoAtendimentoPorTipoLista}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock FontSize="14" Margin="0,2,0,2">
-        <Run Text="{Binding Tipo}" />
-        <Run Text=": " />
-        <Run Text="{Binding MediaTempoFormatada, Mode=OneWay}" />
-                        </TextBlock>
-                    </DataTemplate>
-
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-
-            <Button Content="Voltar" Width="100" HorizontalAlignment="Right" Margin="0,10,0,0" Click="BtnVoltar_Click"/>
-        </StackPanel>
 
 
     </Grid>
