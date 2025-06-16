@@ -1,42 +1,69 @@
 ﻿using BLL;
 using System;
 using System.Windows;
-using UI.ViewModels;
+using System.Windows.Controls;
 
 namespace UI.Views
 {
     public partial class ResponderTickets : Window
     {
+        private int tecnicoLogadoId;
+        public AdminTicketsViewModel ViewModel { get; set; }
         private Utilizador _utilizador;
         public EstatisticasTicketsViewModel EstatisticasVM { get; set; }
+
         public ResponderTickets(Utilizador utilizador)
         {
             InitializeComponent();
-            _utilizador = utilizador;
-            DataContext = new ResponderTicketsViewModel(_utilizador);
 
-            // Passa o id do técnico logado para carregar os tickets dele
+            ViewModel = new AdminTicketsViewModel(utilizador);
+
+            // Ligação do action para abrir a janela de responder ticket
+            ViewModel.AbrirJanelaResponderTicket = AbrirJanelaResponderTicket;
+
             EstatisticasVM = new EstatisticasTicketsViewModel(
-    _utilizador.Id,
-    tipoFiltro: "Todos",
-    prioridadeFiltro: "Todos",
-    estadoTicketFiltro: "Todos",
-    estadoAtendimentoFiltro: "Todos"
-);
+                utilizador.Id, "Todos", "Todos", "Todos", "Todos");
 
-            MapaSection.DataContext = EstatisticasVM;
+            DataContext = ViewModel;
+            // ou cria contextos separados para cada secção
+        }
+
+        private void AbrirJanelaResponderTicket(Ticket ticket)
+        {
+            if (ticket == null)
+                return;
+
+            var janela = new ResponderTicketDetalhes(ticket, _utilizador ?? ViewModel.TecnicoLogado);
+            janela.ShowDialog();
         }
 
         private void BtnResponderTickets_Click(object sender, RoutedEventArgs e)
         {
             MainMenu.Visibility = Visibility.Collapsed;
+            MapaSection.Visibility = Visibility.Collapsed;
             ResponderSection.Visibility = Visibility.Visible;
+
+            // Atualiza o DataContext para a seção responder
+            ResponderSection.DataContext = ViewModel;
+        }
+
+        private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.AplicarFiltros();
+        }
+
+        private void BtnAplicarFiltros_Click1(object sender, RoutedEventArgs e)
+        {
+            EstatisticasVM.AtualizarEstatisticas();
         }
 
         private void BtnVerMapas_Click(object sender, RoutedEventArgs e)
         {
             MainMenu.Visibility = Visibility.Collapsed;
             MapaSection.Visibility = Visibility.Visible;
+
+            // Aqui mudas o DataContext desta secção
+            MapaSection.DataContext = EstatisticasVM;
         }
 
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
@@ -52,30 +79,6 @@ namespace UI.Views
             loginWindow.Show();
             this.Close();
         }
-        private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ResponderTicketsViewModel vm)
-            {
-                vm.CarregarTickets();
-            }
-        }
-        private void BtnAplicarFiltros_Click1(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is ResponderTicketsViewModel vm)
-            {
-                EstatisticasVM = new EstatisticasTicketsViewModel(
-                    _utilizador.Id,
-                    vm.TipoFiltro,
-                    vm.PrioridadeFiltro,
-                    vm.EstadoTicketFiltro,
-                    vm.EstadoAtendimentoFiltro,
-                    vm.DataInicioFiltro,
-                    vm.DataFimFiltro);
-
-                MapaSection.DataContext = EstatisticasVM;
-            }
-        }
-
-
     }
 }
+
