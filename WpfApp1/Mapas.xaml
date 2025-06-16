@@ -5,29 +5,64 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="Mapas" Height="450" Width="800">
-    <Grid Margin="10">
-        <StackPanel>
-            <TextBlock FontWeight="Bold" FontSize="16" Text="Estatísticas de Tickets" Margin="0,0,0,10" />
+        Title="Mapas" Height="500" Width="850"
+        Background="#FAFAFA"
+        FontFamily="Segoe UI"
+        FontSize="14"
+        KeyboardNavigation.TabNavigation="Cycle"
+        >
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
-                <TextBlock Text="Total Tickets: " FontWeight="Bold" Width="150"/>
+    <Window.Resources>
+        <!-- Estilo para DataGrid para melhorar visual -->
+        <Style TargetType="DataGrid">
+            <Setter Property="AlternatingRowBackground" Value="#F3F6FA"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#E1E8F0"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#E1E8F0"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#2C3E50"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <StackPanel>
+
+            <TextBlock FontWeight="Bold" FontSize="20" 
+                       Text="Estatísticas de Tickets" 
+                       Margin="0,0,0,20"
+                       AutomationProperties.Name="Título da página"/>
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock Text="Total Tickets: " FontWeight="SemiBold" Width="180" />
                 <TextBlock Text="{Binding TotalTickets}" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Percentual Respondidos: " FontWeight="Bold" Width="150"/>
-                <TextBlock Text="{Binding PercentualRespondidos}" />
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                <TextBlock Text="Percentual Respondidos: " FontWeight="SemiBold" Width="180"/>
+                <TextBlock Text="{Binding PercentualRespondidos, StringFormat={}{0:P2}}" />
             </StackPanel>
 
-            <TextBlock FontWeight="Bold" Text="Média de Tempo por Tipo:" Margin="0,20,0,5"/>
+            <TextBlock FontWeight="Bold" FontSize="16" Text="Média de Tempo por Tipo:" Margin="0,0,0,10" />
 
-            <DataGrid ItemsSource="{Binding MediaTempoAtendimentoPorTipoLista}" AutoGenerateColumns="False" Height="200" IsReadOnly="True">
+            <DataGrid ItemsSource="{Binding MediaTempoAtendimentoPorTipoLista}" 
+                      AutoGenerateColumns="False" 
+                      Height="260" 
+                      IsReadOnly="True"
+                      KeyboardNavigation.TabIndex="0"
+                      ToolTip="Tabela com a média de tempo por tipo de ticket"
+                      >
+
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
-                    <DataGridTextColumn Header="Média Tempo" Binding="{Binding MediaTempoFormatada}" Width="150"/>
+                    <DataGridTextColumn Header="Média Tempo" Binding="{Binding MediaTempoFormatada}" Width="160"/>
                 </DataGrid.Columns>
             </DataGrid>
+
         </StackPanel>
     </Grid>
 
