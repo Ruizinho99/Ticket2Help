@@ -1,32 +1,47 @@
-﻿using System.Windows;
-using BLL; // Ajuste conforme seu projeto
-using UI.ViewModels; // Supondo que o ViewModel esteja nesse namespace, ajuste se necessário
+﻿using System;
+using System.Windows;
+using UI.ViewModels;
 
 namespace UI
 {
-    /**
-     * @class Mapas
-     * @brief Janela que exibe mapas ou gráficos relacionados às estatísticas de tickets.
-     */
     public partial class Mapas : Window
     {
-        /**
-         * @brief ViewModel que contém as estatísticas dos tickets.
-         */
         public EstatisticasTicketsViewModel ViewModel { get; set; }
 
-        /**
-         * @brief Construtor da janela Mapas.
-         * Inicializa a interface e configura o DataContext com o ViewModel.
-         * 
-         * @param tecnicoId Identificador do técnico para carregar as estatísticas filtradas.
-         */
         public Mapas(int tecnicoId)
         {
             InitializeComponent();
+            ViewModel = new EstatisticasTicketsViewModel(
+                tecnicoId,
+                tipoFiltro: "Todos",
+                prioridadeFiltro: "Todos",
+                estadoTicketFiltro: "Todos",
+                estadoAtendimentoFiltro: "Todos",
+                dataInicio: DateTime.Today.AddMonths(-1),
+                dataFim: DateTime.Today);
 
-            ViewModel = new EstatisticasTicketsViewModel(tecnicoId, "Todos", "Todos", "Todos", "Todos");
             this.DataContext = ViewModel;
+        }
+
+        private void BtnAplicarFiltro_Click(object sender, RoutedEventArgs e)
+        {
+            if (dpDataInicio.SelectedDate.HasValue && dpDataFim.SelectedDate.HasValue)
+            {
+                if (dpDataInicio.SelectedDate > dpDataFim.SelectedDate)
+                {
+                    MessageBox.Show("A data de início não pode ser maior que a data de fim.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                ViewModel.DataInicioFiltro = dpDataInicio.SelectedDate.Value;
+                ViewModel.DataFimFiltro = dpDataFim.SelectedDate.Value;
+
+                ViewModel.CarregarEstatisticas();
+            }
+            else
+            {
+                MessageBox.Show("Selecione ambas as datas para aplicar o filtro.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }
