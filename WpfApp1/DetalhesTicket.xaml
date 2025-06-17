@@ -152,41 +152,49 @@
              * @brief Seção que apresenta informações gerais do ticket.
              */
             -->
-            <GroupBox Header="Informações Gerais" Margin="0,0,0,15">
+            <GroupBox Header="Informações Gerais" Margin="0,0,0,15" Height="287">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="180"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                        <TextBlock Text="Tipo:" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding Tipo}"/>
+                    <TextBlock Text="ID:" Style="{StaticResource LabelTextBlock}" Grid.Row="0" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding Id}" Style="{StaticResource ValueTextBlock}" Grid.Row="0" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="ID:" Style="{StaticResource LabelTextBlock}" Grid.Row="0" Grid.Column="0"/>
-                    <TextBlock Text="{Binding Id}" Style="{StaticResource ValueTextBlock}" Grid.Row="0" Grid.Column="1"/>
+                    <TextBlock Text="Tipo:" Style="{StaticResource LabelTextBlock}" Grid.Row="1" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding Tipo}" Style="{StaticResource ValueTextBlock}" Grid.Row="1" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="Tipo:" Style="{StaticResource LabelTextBlock}" Grid.Row="1" Grid.Column="0"/>
-                    <TextBlock Text="{Binding Tipo}" Style="{StaticResource ValueTextBlock}" Grid.Row="1" Grid.Column="1"/>
+                    <TextBlock Text="Subtipo do Problema:" Style="{StaticResource LabelTextBlock}" Grid.Row="2" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding SubtipoProblema}" Style="{StaticResource ValueTextBlock}" Grid.Row="2" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="Subtipo do Problema:" Style="{StaticResource LabelTextBlock}" Grid.Row="2" Grid.Column="0"/>
-                    <TextBlock Text="{Binding SubtipoProblema}" Style="{StaticResource ValueTextBlock}" Grid.Row="2" Grid.Column="1"/>
+                    <TextBlock Text="Prioridade:" Style="{StaticResource LabelTextBlock}" Grid.Row="3" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding Prioridade}" Style="{StaticResource ValueTextBlock}" Grid.Row="3" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="Prioridade:" Style="{StaticResource LabelTextBlock}" Grid.Row="3" Grid.Column="0"/>
-                    <TextBlock Text="{Binding Prioridade}" Style="{StaticResource ValueTextBlock}" Grid.Row="3" Grid.Column="1"/>
+                    <TextBlock Text="Estado do Ticket:" Style="{StaticResource LabelTextBlock}" Grid.Row="4" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding EstadoTicket}" Style="{StaticResource ValueTextBlock}" Grid.Row="4" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="Estado do Ticket:" Style="{StaticResource LabelTextBlock}" Grid.Row="4" Grid.Column="0"/>
-                    <TextBlock Text="{Binding EstadoTicket}" Style="{StaticResource ValueTextBlock}" Grid.Row="4" Grid.Column="1"/>
+                    <TextBlock Text="Criado em:" Style="{StaticResource LabelTextBlock}" Grid.Row="5" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding DataCriacao, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="5" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="Criado em:" Style="{StaticResource LabelTextBlock}" Grid.Row="5" Grid.Column="0"/>
-                    <TextBlock Text="{Binding DataCriacao, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="5" Grid.Column="1"/>
+                    <TextBlock Text="Data de Atendimento:" Style="{StaticResource LabelTextBlock}" Grid.Row="6" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding DataAtendimento, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="6" Grid.Column="1" Margin="0,5"/>
 
-                    <TextBlock Text="Data de Atendimento:" Style="{StaticResource LabelTextBlock}" Grid.Row="6" Grid.Column="0"/>
-                    <TextBlock Text="{Binding DataAtendimento, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="6" Grid.Column="1"/>
-
-                    <TextBlock Text="Data de Conclusão:" Style="{StaticResource LabelTextBlock}" Grid.Row="7" Grid.Column="0"/>
-                    <TextBlock Text="{Binding DataConclusao, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="7" Grid.Column="1"/>
+                    <TextBlock Text="Data de Conclusão:" Style="{StaticResource LabelTextBlock}" Grid.Row="7" Grid.Column="0" Margin="0,5"/>
+                    <TextBlock Text="{Binding DataConclusao, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="7" Grid.Column="1" Margin="0,5"/>
                 </Grid>
             </GroupBox>
+
             <!--
             /**
              * @brief Seção para definir o estado de atendimento do ticket.
