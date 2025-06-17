@@ -4,24 +4,16 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace UI.Views
 {
-    /**
-     * @class ResponderTickets
-     * @brief Janela para listar e gerenciar tickets que o utilizador pode responder.
-     * Permite aplicar filtros, ordenar, responder tickets, visualizar mapas e efetuar logout.
-     */
     public partial class ResponderTickets : Window
     {
-        private Utilizador _utilizador; /**< Utilizador logado que está respondendo aos tickets */
+        private Utilizador _utilizador;
 
-        /**
-         * @brief Construtor da janela ResponderTickets.
-         * Inicializa a interface e carrega os tickets do utilizador sem filtros.
-         * 
-         * @param utilizador Utilizador logado.
-         */
         public ResponderTickets(Utilizador utilizador)
         {
             InitializeComponent();
@@ -31,17 +23,9 @@ namespace UI.Views
             CarregarTicketsParaResponder();
         }
 
-        /**
-         * @brief Carrega os tickets para responder aplicando filtros e ordenação.
-         * 
-         * @param tipoFiltro Tipo do ticket (ex: "Hardware", "Software" ou "Todos").
-         * @param prioridadeFiltro Prioridade do ticket (ex: "Baixa", "Média", "Alta" ou "Todos").
-         * @param estadoTicketFiltro Estado do ticket (ex: "porAtender", "emAtendimento", "atendido" ou "Todos").
-         * @param estadoAtendimentoFiltro Estado do atendimento (ex: "aberto", "resolvido", "naoResolvido" ou "Todos").
-         * @param dataInicio Data inicial para filtro por data de criação (opcional).
-         * @param dataFim Data final para filtro por data de criação (opcional).
-         * @param ordenarPor Critério para ordenação dos tickets (ex: "ID Ascendente", "Data Descendente").
-         */
+        /// <summary>
+        /// Carrega os tickets para responder, aplicando filtros e ordenação, e popula o WrapPanel com cartões.
+        /// </summary>
         private void CarregarTicketsParaResponder(
             string tipoFiltro = "Todos",
             string prioridadeFiltro = "Todos",
@@ -51,6 +35,7 @@ namespace UI.Views
             DateTime? dataFim = null,
             string ordenarPor = null)
         {
+            // Obter os tickets do banco aplicando filtros
             var tickets = TicketDAL.ObterTicketsPorAtender(
                 tipoFiltro,
                 prioridadeFiltro,
@@ -61,7 +46,7 @@ namespace UI.Views
                 dataFim
             );
 
-            // Ordenar conforme seleção
+            // Ordena conforme critério selecionado
             switch (ordenarPor)
             {
                 case "ID Ascendente":
@@ -81,13 +66,111 @@ namespace UI.Views
                     break;
             }
 
-            dgTicketsResponder.ItemsSource = tickets; ///< Atualiza o DataGrid com a lista de tickets
+            // Limpa o painel antes de adicionar os cartões
+            TicketsPanel.Children.Clear();
+
+            // Cria e adiciona um cartão para cada ticket
+            foreach (var ticket in tickets)
+            {
+                var card = CriarCartaoTicket(ticket);
+                TicketsPanel.Children.Add(card);
+            }
         }
 
-        /**
-         * @brief Evento do botão para aplicar filtros e atualizar a lista de tickets.
-         * Obtém os filtros da interface e chama CarregarTicketsParaResponder.
-         */
+        /// <summary>
+        /// Cria um cartão visual para representar um ticket.
+        /// </summary>
+        private UIElement CriarCartaoTicket(Ticket ticket)
+        {
+            // Cria uma borda para o cartão com sombra e arredondamento
+            var border = new Border
+            {
+                Width = 240,
+                Margin = new Thickness(10),
+                Padding = new Thickness(10),
+                Background = Brushes.White,
+                BorderBrush = Brushes.LightGray,
+                BorderThickness = new Thickness(1),
+                CornerRadius = new CornerRadius(6),
+                Effect = new DropShadowEffect
+                {
+                    Color = Colors.Gray,
+                    ShadowDepth = 2,
+                    Opacity = 0.3
+                },
+                Cursor = Cursors.Hand
+            };
+
+            // Pilha vertical para organizar as informações
+            var stack = new StackPanel();
+
+            // Texto do ID do ticket em negrito
+            var txtId = new TextBlock
+            {
+                Text = $"Ticket #{ticket.Id}",
+                FontWeight = FontWeights.Bold,
+                FontSize = 16,
+                Margin = new Thickness(0, 0, 0, 5)
+            };
+
+            // Tipo do ticket
+            var txtTipo = new TextBlock
+            {
+                Text = $"Tipo: {ticket.Tipo}",
+                Margin = new Thickness(0, 0, 0, 3)
+            };
+
+            // Prioridade
+            var txtPrioridade = new TextBlock
+            {
+                Text = $"Prioridade: {ticket.Prioridade}",
+                Margin = new Thickness(0, 0, 0, 3)
+            };
+
+            // Descrição resumida (até 80 caracteres)
+            var descricao = ticket.Descricao.Length > 80 ? ticket.Descricao.Substring(0, 80) + "..." : ticket.Descricao;
+            var txtDescricao = new TextBlock
+            {
+                Text = descricao,
+                TextWrapping = TextWrapping.Wrap,
+                Margin = new Thickness(0, 0, 0, 5)
+            };
+
+            // Data de criação formatada
+            var txtData = new TextBlock
+            {
+                Text = $"Criado em: {ticket.DataCriacao:dd/MM/yyyy}",
+                FontStyle = FontStyles.Italic,
+                FontSize = 11
+            };
+
+            // Adiciona todos os elementos ao StackPanel
+            stack.Children.Add(txtId);
+            stack.Children.Add(txtTipo);
+            stack.Children.Add(txtPrioridade);
+            stack.Children.Add(txtDescricao);
+            stack.Children.Add(txtData);
+
+            // Coloca o StackPanel dentro da borda
+            border.Child = stack;
+
+            // Evento para abrir janela de resposta ao clicar no cartão
+            border.MouseLeftButtonUp += (s, e) =>
+            {
+                var janelaResposta = new ResponderTicketDetalhes(ticket, _utilizador);
+                janelaResposta.Owner = this;
+                janelaResposta.ShowDialog();
+
+                // Atualiza a lista de tickets após fechar a janela de resposta
+                BtnAplicarFiltros_Click(null, null);
+            };
+
+            return border;
+        }
+
+        /// <summary>
+        /// Evento do botão para aplicar os filtros e atualizar a lista de tickets.
+        /// </summary>
         private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
         {
             string tipoFiltro = (cbFiltroTipo.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "Todos";
@@ -109,19 +192,18 @@ namespace UI.Views
                 ordenarPor);
         }
 
-        /**
-         * @brief Evento do botão para mostrar a seção de responder tickets.
-         * Oculta o menu principal e exibe a seção de resposta.
-         */
+        /// <summary>
+        /// Mostra a seção de responder tickets, ocultando o menu inicial.
+        /// </summary>
         private void BtnResponderTickets_Click(object sender, RoutedEventArgs e)
         {
             MainMenu.Visibility = Visibility.Collapsed;
             ResponderSection.Visibility = Visibility.Visible;
         }
 
-        /**
-         * @brief Evento do botão para abrir a janela de mapas.
-         */
+        /// <summary>
+        /// Abre a janela de mapas.
+        /// </summary>
         private void BtnVerMapas_Click(object sender, RoutedEventArgs e)
         {
             var janelaMapas = new Mapas(_utilizador.Id);
@@ -129,43 +211,18 @@ namespace UI.Views
             janelaMapas.Show();
         }
 
-        /**
-         * @brief Evento do botão para voltar ao menu principal.
-         * Oculta a seção de resposta e exibe o menu principal.
-         */
+        /// <summary>
+        /// Volta para o menu principal, ocultando a seção de resposta.
+        /// </summary>
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
             ResponderSection.Visibility = Visibility.Collapsed;
             MainMenu.Visibility = Visibility.Visible;
         }
 
-        /**
-         * @brief Evento de duplo clique no DataGrid de tickets.
-         * Abre a janela para responder ao ticket selecionado.
-         * Atualiza a lista após fechamento da janela.
-         */
-        private void dgTicketsResponder_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var ticketSelecionado = dgTicketsResponder.SelectedItem as Ticket;
-            if (ticketSelecionado == null)
-            {
-                MessageBox.Show("Por favor, selecione um ticket para responder.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // Abre a janela de detalhes para responder o ticket
-            var janelaResposta = new ResponderTicketDetalhes(ticketSelecionado, _utilizador);
-            janelaResposta.Owner = this;  // opcional para manter janela pai
-            janelaResposta.ShowDialog();
-
-            // Após fechar a janela de resposta, atualiza a lista de tickets
-            BtnAplicarFiltros_Click(null, null);
-        }
-
-        /**
-         * @brief Evento do botão para fazer logout.
-         * Fecha esta janela e abre a janela de login.
-         */
+        /// <summary>
+        /// Faz logout, fecha esta janela e abre a janela de login.
+        /// </summary>
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             var loginWindow = new LoginWindow();

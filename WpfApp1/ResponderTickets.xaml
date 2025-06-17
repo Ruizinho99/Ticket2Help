@@ -9,6 +9,128 @@
         KeyboardNavigation.TabNavigation="Cycle">
 
     <Window.Resources>
+        <!-- ToggleButton para o ComboBox -->
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Border x:Name="Border"
+      Background="Transparent"
+      BorderBrush="Transparent"
+      BorderThickness="1"
+      Padding="5">
+                <Path x:Name="Arrow"
+        Data="M 0 0 L 4 4 L 8 0 Z"
+        Fill="#666"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Arrow" Property="Fill" Value="#007ACC"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="Arrow" Property="RenderTransform">
+                        <Setter.Value>
+                            <RotateTransform Angle="180" CenterX="4" CenterY="2"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Arrow" Property="Fill" Value="#AAA"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Estilo completo -->
+        <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <!-- Borda visível e arredondada -->
+                            <Border x:Name="MainBorder"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      CornerRadius="6"
+                      SnapsToDevicePixels="True">
+                                <Grid>
+                                    <!-- ToggleButton -->
+                                    <ToggleButton x:Name="ToggleButton"
+                                    Template="{StaticResource ComboBoxToggleButton}"
+                                    Focusable="False"
+                                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    ClickMode="Press"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Width="20"
+                                    Margin="0,0,5,0"/>
+
+                                    <!-- Item Selecionado -->
+                                    <ContentPresenter x:Name="ContentSite"
+                                        Margin="10,4,30,4"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Content="{TemplateBinding SelectionBoxItem}"
+                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                        ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                        IsHitTestVisible="False"/>
+
+                                </Grid>
+                            </Border>
+
+                            <!-- Popup -->
+                            <Popup x:Name="PART_Popup"
+                     Placement="Bottom"
+                     IsOpen="{TemplateBinding IsDropDownOpen}"
+                     AllowsTransparency="True"
+                     Focusable="False"
+                     PopupAnimation="Slide">
+                                <Border x:Name="PopupBorder"
+                          Background="White"
+                          BorderBrush="#CCCCCC"
+                          BorderThickness="1"
+                          CornerRadius="6"
+                          SnapsToDevicePixels="True"
+                          Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                          >
+                                    <ScrollViewer Margin="4"
+                                    SnapsToDevicePixels="True"
+                                    CanContentScroll="True">
+                                        <StackPanel IsItemsHost="True"
+                                      KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <!-- Efeitos Visuais -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#007ACC"/>
+                                <Setter TargetName="MainBorder" Property="Background" Value="#F0F8FF"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#007ACC"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="MainBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="LogoutButton" TargetType="Button">
             <Setter Property="Background" Value="#D9534F"/>
             <!-- vermelho bootstrap -->
@@ -124,31 +246,31 @@
 
     <Grid Margin="15">
         <!-- Menu Inicial -->
-        <StackPanel x:Name="MainMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible" Width="220">
+        <StackPanel x:Name="MainMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible" Width="220" >
             <Button Content="Responder Tickets" Style="{StaticResource PrimaryButton}" Height="42" Click="BtnResponderTickets_Click" AutomationProperties.Name="Botão Responder Tickets"/>
             <Button Content="Ver Mapas" Style="{StaticResource PrimaryButton}" Height="42" Click="BtnVerMapas_Click" AutomationProperties.Name="Botão Ver Mapas"/>
             <Button Content="Logout" Style="{StaticResource LogoutButton}" Height="42" Click="BtnLogout_Click" AutomationProperties.Name="Botão Logout"/>
-
         </StackPanel>
 
-        <!-- Responder Tickets -->
         <StackPanel x:Name="ResponderSection" Visibility="Collapsed" Margin="0,0,0,0">
             <!-- Filtros -->
             <GroupBox Header="Filtros" Margin="0,0,0,10" Padding="15">
-                <StackPanel Orientation="Vertical" >
-
+                <StackPanel Orientation="Vertical">
+                    <!-- Linha 1: Tipo e Prioridade -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Tipo:" Width="90" Style="{StaticResource LabelTextBlock}" />
-                        <ComboBox x:Name="cbFiltroTipo" Width="150" SelectedIndex="0" 
-                                  AutomationProperties.Name="Filtro Tipo">
+                        <ComboBox x:Name="cbFiltroTipo" Width="150" SelectedIndex="0"
+                              AutomationProperties.Name="Filtro Tipo"
+                              Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todos</ComboBoxItem>
                             <ComboBoxItem>Hardware</ComboBoxItem>
                             <ComboBoxItem>Software</ComboBoxItem>
                         </ComboBox>
 
                         <TextBlock Text="Prioridade:" Width="90" Margin="20,0,0,0" Style="{StaticResource LabelTextBlock}" />
-                        <ComboBox x:Name="cbFiltroPrioridade" Width="150" SelectedIndex="0" 
-                                  AutomationProperties.Name="Filtro Prioridade">
+                        <ComboBox x:Name="cbFiltroPrioridade" Width="150" SelectedIndex="0"
+                              AutomationProperties.Name="Filtro Prioridade"
+                              Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todos</ComboBoxItem>
                             <ComboBoxItem>Baixa</ComboBoxItem>
                             <ComboBoxItem>Média</ComboBoxItem>
@@ -156,10 +278,12 @@
                         </ComboBox>
                     </StackPanel>
 
+                    <!-- Linha 2: Estado Ticket e Estado Atendimento -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Estado Ticket:" Width="90" Style="{StaticResource LabelTextBlock}" />
                         <ComboBox x:Name="cbFiltroEstadoTicket" Width="150" SelectedIndex="0"
-                                  AutomationProperties.Name="Filtro Estado Ticket">
+                              AutomationProperties.Name="Filtro Estado Ticket"
+                              Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todos</ComboBoxItem>
                             <ComboBoxItem>porAtender</ComboBoxItem>
                             <ComboBoxItem>emAtendimento</ComboBoxItem>
@@ -168,7 +292,8 @@
 
                         <TextBlock Text="Estado Atendimento:" Width="140" Margin="20,0,0,0" Style="{StaticResource LabelTextBlock}" />
                         <ComboBox x:Name="cbFiltroEstadoAtendimento" Width="150" SelectedIndex="0"
-                                  AutomationProperties.Name="Filtro Estado Atendimento">
+                              AutomationProperties.Name="Filtro Estado Atendimento"
+                              Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todos</ComboBoxItem>
                             <ComboBoxItem>aberto</ComboBoxItem>
                             <ComboBoxItem>naoResolvido</ComboBoxItem>
@@ -176,6 +301,7 @@
                         </ComboBox>
                     </StackPanel>
 
+                    <!-- Linha 3: Data Início e Data Fim -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Data Início:" Width="90" Style="{StaticResource LabelTextBlock}" />
                         <DatePicker x:Name="dpDataInicio" Width="150" AutomationProperties.Name="Filtro Data Início"/>
@@ -184,40 +310,28 @@
                         <DatePicker x:Name="dpDataFim" Width="150" AutomationProperties.Name="Filtro Data Fim"/>
                     </StackPanel>
 
+                    <!-- Linha 4: Ordenar Por e Botão Aplicar -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15" VerticalAlignment="Center">
                         <TextBlock Text="Ordenar Por:" Width="90" Style="{StaticResource LabelTextBlock}" />
-                        <ComboBox x:Name="cbOrdenarPor" Width="320" SelectedIndex="3" AutomationProperties.Name="Filtro Ordenar Por">
+                        <ComboBox x:Name="cbOrdenarPor" Width="320" SelectedIndex="3"
+                              AutomationProperties.Name="Filtro Ordenar Por"
+                              Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>ID Ascendente</ComboBoxItem>
                             <ComboBoxItem>ID Descendente</ComboBoxItem>
                             <ComboBoxItem>Data Ascendente</ComboBoxItem>
                             <ComboBoxItem>Data Descendente</ComboBoxItem>
                         </ComboBox>
 
-                        <Button Content="Aplicar Filtros" Style="{StaticResource PrimaryButton}" Width="140" Margin="20,0,0,0" Click="BtnAplicarFiltros_Click" AutomationProperties.Name="Botão Aplicar Filtros"/>
+                        <Button Content="Aplicar Filtros" Style="{StaticResource PrimaryButton}" Width="140" Margin="20,0,0,0"
+                            Click="BtnAplicarFiltros_Click" AutomationProperties.Name="Botão Aplicar Filtros"/>
                     </StackPanel>
-
                 </StackPanel>
             </GroupBox>
 
-            <!-- DataGrid Tickets -->
-            <DataGrid x:Name="dgTicketsResponder" AutoGenerateColumns="False" Height="300" Margin="0,0,0,10" MouseDoubleClick="dgTicketsResponder_MouseDoubleClick"
-                      AutomationProperties.Name="Tabela de Tickets para Responder" 
-                      KeyboardNavigation.TabIndex="0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="40" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="100" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Subtipo" Binding="{Binding SubtipoProblema}" Width="100" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="100" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="200" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Estado Ticket" Binding="{Binding EstadoTicket}" Width="100" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Estado Atendimento" Binding="{Binding EstadoAtendimento}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Data Criação" Binding="{Binding DataCriacao, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="120" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Data Atendimento" Binding="{Binding DataAtendimento, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="130" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Data Conclusão" Binding="{Binding DataConclusao, StringFormat={}{0:dd/MM/yyyy HH:mm}}" Width="130" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Funcionário" Binding="{Binding NomeFuncionario}" Width="150" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Detalhes Técnico" Binding="{Binding DetalhesTecnico}" Width="200" IsReadOnly="True"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <!-- Área para exibir os tickets em cartões -->
+            <ScrollViewer Height="500" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10">
+                <WrapPanel x:Name="TicketsPanel" ItemWidth="250" ItemHeight="Auto" Margin="10" />
+            </ScrollViewer>
 
             <!-- Botão Voltar -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -225,4 +339,6 @@
             </StackPanel>
         </StackPanel>
     </Grid>
+
+
 </Window>

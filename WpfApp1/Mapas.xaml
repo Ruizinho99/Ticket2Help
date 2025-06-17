@@ -5,28 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="Mapas" Height="500" Width="850"
+        Title="Mapas" Height="600" Width="850"
         Background="#FAFAFA"
         FontFamily="Segoe UI"
         FontSize="14"
-        KeyboardNavigation.TabNavigation="Cycle"
-        >
+        KeyboardNavigation.TabNavigation="Cycle">
 
     <Window.Resources>
-        <!-- Estilo para DataGrid para melhorar visual -->
-        <Style TargetType="DataGrid">
-            <Setter Property="AlternatingRowBackground" Value="#F3F6FA"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#E1E8F0"/>
-            <Setter Property="VerticalGridLinesBrush" Value="#E1E8F0"/>
-            <Setter Property="RowBackground" Value="White"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="FontSize" Value="13"/>
-        </Style>
-
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#2C3E50"/>
-        </Style>
+        <!-- Seus estilos existentes -->
     </Window.Resources>
 
     <Grid Margin="20">
@@ -37,12 +23,24 @@
                        Margin="0,0,0,20"
                        AutomationProperties.Name="Título da página"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <!-- Filtros de datas -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+                <TextBlock Text="Data Início:" VerticalAlignment="Center" Width="80" Margin="0,0,10,0" />
+                <DatePicker x:Name="dpDataInicio" SelectedDate="{Binding DataInicioFiltro, Mode=TwoWay}" ToolTip="Selecione a data inicial" />
+                <TextBlock Text="Data Fim:" VerticalAlignment="Center" Width="70" Margin="20,0,10,0" />
+                <DatePicker x:Name="dpDataFim" SelectedDate="{Binding DataFimFiltro, Mode=TwoWay}" ToolTip="Selecione a data final" />
+                <Button Content="Aplicar Filtro" Width="120" Margin="20,0,0,0" Click="BtnAplicarFiltro_Click" />
+            </StackPanel>
+
+            <!-- Estatísticas gerais -->
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                 <TextBlock Text="Total Tickets: " FontWeight="SemiBold" Width="180" />
                 <TextBlock Text="{Binding TotalTickets}" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+       
+
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,20" >
                 <TextBlock Text="Percentual Respondidos: " FontWeight="SemiBold" Width="180"/>
                 <TextBlock Text="{Binding PercentualRespondidos, StringFormat={}{0:P2}}" />
             </StackPanel>

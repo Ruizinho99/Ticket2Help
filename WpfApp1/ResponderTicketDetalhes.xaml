@@ -8,6 +8,127 @@
         KeyboardNavigation.TabNavigation="Cycle">
 
     <Window.Resources>
+        <!-- ToggleButton para o ComboBox -->
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Border x:Name="Border"
+  Background="Transparent"
+  BorderBrush="Transparent"
+  BorderThickness="1"
+  Padding="5">
+                <Path x:Name="Arrow"
+    Data="M 0 0 L 4 4 L 8 0 Z"
+    Fill="#666"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="Arrow" Property="Fill" Value="#007ACC"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="Arrow" Property="RenderTransform">
+                        <Setter.Value>
+                            <RotateTransform Angle="180" CenterX="4" CenterY="2"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Arrow" Property="Fill" Value="#AAA"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Estilo completo -->
+        <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="MinHeight" Value="40"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <!-- Borda visível e arredondada -->
+                            <Border x:Name="MainBorder"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  CornerRadius="6"
+                  SnapsToDevicePixels="True">
+                                <Grid>
+                                    <!-- ToggleButton -->
+                                    <ToggleButton x:Name="ToggleButton"
+                                Template="{StaticResource ComboBoxToggleButton}"
+                                Focusable="False"
+                                IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                ClickMode="Press"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Width="20"
+                                Margin="0,0,5,0"/>
+
+                                    <!-- Item Selecionado -->
+                                    <ContentPresenter x:Name="ContentSite"
+                                    Margin="10,4,30,4"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                    IsHitTestVisible="False"/>
+
+                                </Grid>
+                            </Border>
+
+                            <!-- Popup -->
+                            <Popup x:Name="PART_Popup"
+                 Placement="Bottom"
+                 IsOpen="{TemplateBinding IsDropDownOpen}"
+                 AllowsTransparency="True"
+                 Focusable="False"
+                 PopupAnimation="Slide">
+                                <Border x:Name="PopupBorder"
+                      Background="White"
+                      BorderBrush="#CCCCCC"
+                      BorderThickness="1"
+                      CornerRadius="6"
+                      SnapsToDevicePixels="True"
+                      Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                      >
+                                    <ScrollViewer Margin="4"
+                                SnapsToDevicePixels="True"
+                                CanContentScroll="True">
+                                        <StackPanel IsItemsHost="True"
+                                  KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <!-- Efeitos Visuais -->
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#007ACC"/>
+                                <Setter TargetName="MainBorder" Property="Background" Value="#F0F8FF"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="MainBorder" Property="BorderBrush" Value="#007ACC"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="MainBorder" Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!-- Estilo botões primários -->
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="#007ACC"/>
@@ -119,16 +240,18 @@
         <!-- Estado do Ticket -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 15" VerticalAlignment="Center">
             <Label Content="Estado do Ticket:" Target="{Binding ElementName=cmbEstadoTicket}" 
-                   VerticalAlignment="Center" FontWeight="SemiBold" Margin="0 0 10 0" />
+           VerticalAlignment="Center" FontWeight="SemiBold" Margin="0 0 10 0" />
             <ComboBox x:Name="cmbEstadoTicket" Width="180" SelectedIndex="0"
-                      ToolTip="Selecione o estado atual do ticket"
-                      KeyboardNavigation.TabIndex="0"
-                      AutomationProperties.Name="Estado do Ticket">
+              ToolTip="Selecione o estado atual do ticket"
+              KeyboardNavigation.TabIndex="0"
+              AutomationProperties.Name="Estado do Ticket"
+              Style="{StaticResource ModernComboBoxStyle}">
                 <ComboBoxItem Content="porAtender" />
                 <ComboBoxItem Content="emAtendimento" />
                 <ComboBoxItem Content="atendido" />
             </ComboBox>
         </StackPanel>
+
 
         <!-- Campo de Resposta -->
         <StackPanel Grid.Row="2" Margin="0 0 0 15">

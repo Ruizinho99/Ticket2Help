@@ -117,9 +117,10 @@ namespace UI.ViewModels
             _tecnicoLogado = tecnico;
 
             ResponderCommand = new RelayCommand(
-                executar: _ => ResponderTicket(),
-                podeExecutar: _ => TicketSelecionado != null
-            );
+     _ => ResponderTicket(),
+     _ => TicketSelecionado != null
+ );
+
 
             CarregarTickets();
         }

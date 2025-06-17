@@ -1,26 +1,19 @@
 ﻿using DAL;
 using BLL;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace UI
 {
-    /**
-     * @class UserTickets
-     * @brief Janela para que um utilizador visualize seus tickets submetidos e possa criar novos tickets.
-     */
     public partial class UserTickets : Window
     {
-        private Utilizador utilizador; /**< Utilizador logado */
+        private Utilizador utilizador;
 
-        /**
-         * @brief Construtor da janela UserTickets.
-         * Inicializa a interface e carrega os tickets submetidos pelo utilizador.
-         * 
-         * @param utilizador Utilizador atualmente logado.
-         */
         public UserTickets(Utilizador utilizador)
         {
             InitializeComponent();
@@ -31,14 +24,7 @@ namespace UI
             CarregarTicketsSubmetidos(); // Carrega tickets do utilizador
         }
 
-        /**
-         * @brief Carrega e filtra os tickets submetidos pelo utilizador, e aplica ordenação.
-         * 
-         * @param tipoFiltro Filtro para o tipo do ticket ("Hardware", "Software", "Todos", etc).
-         * @param prioridadeFiltro Filtro para a prioridade do ticket ("Alta", "Média", "Baixa", "Todas", etc).
-         * @param estadoFiltro Filtro para o estado do ticket ("Por resolver", "Resolvido", "Todos", etc).
-         * @param ordenarPor Critério para ordenação ("ID Ascendente", "Data Descendente", etc).
-         */
+        // Método atualizado para carregar tickets no layout de cards
         private void CarregarTicketsSubmetidos(string tipoFiltro = null, string prioridadeFiltro = null, string estadoFiltro = null, string ordenarPor = null)
         {
             var tickets = TicketDAL.ObterTicketsDoUtilizador(utilizador.Id);
@@ -71,12 +57,78 @@ namespace UI
                     break;
             }
 
-            dgTickets.ItemsSource = tickets; /**< Atualiza o DataGrid com os tickets filtrados e ordenados */
+            PreencherTickets(tickets); // Exibir os tickets como cards
         }
 
-        /**
-         * @brief Evento do botão para aplicar os filtros selecionados na interface.
-         */
+        // Novo método para criar os cards visualmente
+        private void PreencherTickets(List<Ticket> tickets)
+        {
+            TicketsPanel.Children.Clear();
+
+            foreach (var ticket in tickets)
+            {
+                var border = new Border
+                {
+                    Background = Brushes.White,
+                    CornerRadius = new CornerRadius(10),
+                    Margin = new Thickness(10),
+                    Padding = new Thickness(10),
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#DDD")),
+                    BorderThickness = new Thickness(1),
+                    Width = 250,
+                    Cursor = Cursors.Hand,
+                    Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        Color = Colors.Gray,
+                        Direction = 320,
+                        ShadowDepth = 3,
+                        Opacity = 0.3
+                    }
+                };
+
+                var stack = new StackPanel();
+
+                stack.Children.Add(new TextBlock { Text = $"ID: {ticket.Id}", FontWeight = FontWeights.Bold, FontSize = 16, Margin = new Thickness(0, 0, 0, 5) });
+                stack.Children.Add(new TextBlock { Text = $"Tipo: {ticket.Tipo}", Margin = new Thickness(0, 0, 0, 3) });
+                stack.Children.Add(new TextBlock { Text = $"Prioridade: {ticket.Prioridade}", Margin = new Thickness(0, 0, 0, 3) });
+                stack.Children.Add(new TextBlock
+                {
+                    Text = $"Estado: {ticket.EstadoTicket}",
+                    Margin = new Thickness(0, 0, 0, 3),
+                    Foreground = GetEstadoColor(ticket.EstadoTicket)
+                });
+                stack.Children.Add(new TextBlock { Text = $"Criado em: {ticket.DataCriacao.ToShortDateString()}", Margin = new Thickness(0, 0, 0, 3) });
+
+                border.Child = stack;
+
+                // Adiciona evento de clique no card
+                border.MouseLeftButtonUp += (s, e) =>
+                {
+                    DetalhesTicket detalhesWindow = new DetalhesTicket(ticket);
+                    detalhesWindow.ShowDialog();
+                };
+
+                TicketsPanel.Children.Add(border);
+            }
+        }
+
+        // Define a cor do estado do ticket
+        private Brush GetEstadoColor(string estado)
+        {
+            switch (estado)
+            {
+                case "Por resolver":
+                    return Brushes.Red;
+                case "Em atendimento":
+                    return Brushes.Orange;
+                case "Resolvido":
+                    return Brushes.Green;
+                default:
+                    return Brushes.Black;
+            }
+        }
+
+        // Aplica filtros e ordenação
         private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
         {
             string tipoFiltro = (cbFiltroTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -87,10 +139,6 @@ namespace UI
             CarregarTicketsSubmetidos(tipoFiltro, prioridadeFiltro, estadoFiltro, ordenarPor);
         }
 
-        /**
-         * @brief Evento do botão para submeter um novo ticket.
-         * Valida os campos obrigatórios, cria o ticket e limpa o formulário.
-         */
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
         {
             if (cbTipo.SelectedItem == null ||
@@ -134,23 +182,6 @@ namespace UI
             }
         }
 
-        /**
-         * @brief Evento de duplo clique no DataGrid de tickets.
-         * Abre uma janela com detalhes do ticket selecionado.
-         */
-        private void dgTickets_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            if (dgTickets.SelectedItem is Ticket ticketSelecionado)
-            {
-                DetalhesTicket detalhesWindow = new DetalhesTicket(ticketSelecionado);
-                detalhesWindow.ShowDialog();
-            }
-        }
-
-        /**
-         * @brief Evento para atualizar os subtipo de problema conforme o tipo selecionado.
-         * Exemplo: se selecionar "Hardware", carrega opções relacionadas a hardware.
-         */
         private void cbTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cbSubtipoProblema.Items.Clear();
@@ -173,28 +204,19 @@ namespace UI
             }
         }
 
-        /**
-         * @brief Exibe a tela de criação de novo ticket e oculta o menu principal.
-         */
         private void BtnCriarTicket_Click(object sender, RoutedEventArgs e)
         {
             MainMenuGrid.Visibility = Visibility.Collapsed;
             CriarTicketGrid.Visibility = Visibility.Visible;
         }
 
-        /**
-         * @brief Exibe a tela de visualização dos tickets submetidos e oculta o menu principal.
-         */
         private void BtnVerTickets_Click(object sender, RoutedEventArgs e)
         {
             MainMenuGrid.Visibility = Visibility.Collapsed;
             VerTicketsGrid.Visibility = Visibility.Visible;
-            CarregarTicketsSubmetidos(); // Atualiza lista ao mostrar
+            CarregarTicketsSubmetidos();
         }
 
-        /**
-         * @brief Volta ao menu principal ocultando as outras telas.
-         */
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
             CriarTicketGrid.Visibility = Visibility.Collapsed;
@@ -202,9 +224,6 @@ namespace UI
             MainMenuGrid.Visibility = Visibility.Visible;
         }
 
-        /**
-         * @brief Evento para logout: fecha esta janela e abre a janela de login.
-         */
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow loginWindow = new LoginWindow();
@@ -213,4 +232,3 @@ namespace UI
         }
     }
 }
-
