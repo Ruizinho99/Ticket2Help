@@ -159,16 +159,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        <TextBlock Text="Tipo:" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Tipo}"/>
 
                     <TextBlock Text="ID:" Style="{StaticResource LabelTextBlock}" Grid.Row="0" Grid.Column="0"/>
                     <TextBlock Text="{Binding Id}" Style="{StaticResource ValueTextBlock}" Grid.Row="0" Grid.Column="1"/>
