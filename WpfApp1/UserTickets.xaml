@@ -96,42 +96,48 @@
                         Style="{StaticResource RedButtonStyle}"/>
             </StackPanel>
         </Grid>
-
         <!-- Página Criar Ticket -->
         <Grid x:Name="CriarTicketGrid" Visibility="Collapsed" Margin="10">
             <StackPanel MaxWidth="400" HorizontalAlignment="Center" VerticalAlignment="Top" >
 
                 <Label Content="Tipo:" Target="{Binding ElementName=cbTipo}" FontWeight="SemiBold" />
                 <ComboBox x:Name="cbTipo" Margin="0,5,0,15" SelectionChanged="cbTipo_SelectionChanged"
-                          KeyboardNavigation.TabIndex="0"
-                          ToolTip="Selecione o tipo de ticket"/>
+                  KeyboardNavigation.TabIndex="0"
+                  ToolTip="Selecione o tipo de ticket">
+                    <ComboBoxItem>Hardware</ComboBoxItem>
+                    <ComboBoxItem>Software</ComboBoxItem>
+                </ComboBox>
 
                 <Label Content="Tipo de Problema:" Target="{Binding ElementName=cbSubtipoProblema}" FontWeight="SemiBold"/>
                 <ComboBox x:Name="cbSubtipoProblema" Margin="0,5,0,15"
-                          KeyboardNavigation.TabIndex="1"
-                          ToolTip="Selecione o subtipo do problema"/>
+                  KeyboardNavigation.TabIndex="1"
+                  ToolTip="Selecione o subtipo do problema"/>
 
                 <Label Content="Prioridade:" Target="{Binding ElementName=cbPrioridade}" FontWeight="SemiBold"/>
                 <ComboBox x:Name="cbPrioridade" Margin="0,5,0,15"
-                          KeyboardNavigation.TabIndex="2"
-                          ToolTip="Selecione a prioridade do ticket"/>
+                  KeyboardNavigation.TabIndex="2"
+                  ToolTip="Selecione a prioridade do ticket">
+                    <ComboBoxItem>Baixa</ComboBoxItem>
+                    <ComboBoxItem>Média</ComboBoxItem>
+                    <ComboBoxItem>Alta</ComboBoxItem>
+                </ComboBox>
 
                 <Label Content="Descrição:" Target="{Binding ElementName=txtDescricao}" FontWeight="SemiBold"/>
                 <TextBox x:Name="txtDescricao" Margin="0,5,0,15" Height="100" AcceptsReturn="True" TextWrapping="Wrap"
-                         KeyboardNavigation.TabIndex="3"
-                         ToolTip="Descreva detalhadamente o problema"/>
+                 KeyboardNavigation.TabIndex="3"
+                 ToolTip="Descreva detalhadamente o problema"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                     <Button Content="Submeter Ticket" Width="140" Height="40" Margin="0,0,10,0"
-                            Click="BtnSubmeter_Click"
-                            ToolTip="Enviar ticket"
-                            KeyboardNavigation.TabIndex="4"
-                            Style="{StaticResource BlueButtonStyle}"/>
+                    Click="BtnSubmeter_Click"
+                    ToolTip="Enviar ticket"
+                    KeyboardNavigation.TabIndex="4"
+                    Style="{StaticResource BlueButtonStyle}"/>
                     <Button Content="← Voltar" Width="100" Height="40"
-                            Click="BtnVoltar_Click"
-                            ToolTip="Voltar ao menu principal"
-                            KeyboardNavigation.TabIndex="5"
-                            Style="{StaticResource RedButtonStyle}"/>
+                    Click="BtnVoltar_Click"
+                    ToolTip="Voltar ao menu principal"
+                    KeyboardNavigation.TabIndex="5"
+                    Style="{StaticResource RedButtonStyle}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
@@ -142,56 +148,78 @@
 
                 <!-- Filtros -->
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Center" >
-                    <!-- ComboBoxes e Labels mantidos iguais para acessibilidade -->
 
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Tipo:" Target="{Binding ElementName=cbFiltroTipo}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbFiltroTipo" Width="120" Margin="0,5,0,0"
-                                  KeyboardNavigation.TabIndex="0"
-                                  ToolTip="Filtrar por tipo de ticket"/>
+                          KeyboardNavigation.TabIndex="0"
+                          ToolTip="Filtrar por tipo de ticket"
+                          SelectedIndex="0">
+                            <ComboBoxItem>Todos</ComboBoxItem>
+                            <ComboBoxItem>Hardware</ComboBoxItem>
+                            <ComboBoxItem>Software</ComboBoxItem>
+                        </ComboBox>
                     </StackPanel>
 
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Prioridade:" Target="{Binding ElementName=cbFiltroPrioridade}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbFiltroPrioridade" Width="120" Margin="0,5,0,0"
-                                  KeyboardNavigation.TabIndex="1"
-                                  ToolTip="Filtrar por prioridade"/>
+                          KeyboardNavigation.TabIndex="1"
+                          ToolTip="Filtrar por prioridade"
+                          SelectedIndex="0">
+                            <ComboBoxItem>Todas</ComboBoxItem>
+                            <ComboBoxItem>Baixa</ComboBoxItem>
+                            <ComboBoxItem>Média</ComboBoxItem>
+                            <ComboBoxItem>Alta</ComboBoxItem>
+                        </ComboBox>
                     </StackPanel>
 
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Estado:" Target="{Binding ElementName=cbFiltroEstado}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbFiltroEstado" Width="120" Margin="0,5,0,0"
-                                  KeyboardNavigation.TabIndex="2"
-                                  ToolTip="Filtrar por estado do ticket"/>
+                          KeyboardNavigation.TabIndex="2"
+                          ToolTip="Filtrar por estado do ticket"
+                          SelectedIndex="0">
+                            <ComboBoxItem>Todos</ComboBoxItem>
+                            <ComboBoxItem>Por resolver</ComboBoxItem>
+                            <ComboBoxItem>Em atendimento</ComboBoxItem>
+                            <ComboBoxItem>Resolvido</ComboBoxItem>
+                        </ComboBox>
                     </StackPanel>
 
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Ordenar por:" Target="{Binding ElementName=cbOrdenarPor}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbOrdenarPor" Width="140" Margin="0,5,0,0"
-                                  KeyboardNavigation.TabIndex="3"
-                                  ToolTip="Ordenar lista de tickets"/>
+                          KeyboardNavigation.TabIndex="3"
+                          ToolTip="Ordenar lista de tickets"
+                          SelectedIndex="3">
+                            <ComboBoxItem>ID Ascendente</ComboBoxItem>
+                            <ComboBoxItem>ID Descendente</ComboBoxItem>
+                            <ComboBoxItem>Data Ascendente</ComboBoxItem>
+                            <ComboBoxItem>Data Descendente</ComboBoxItem>
+                        </ComboBox>
                     </StackPanel>
 
                     <Button Content="Aplicar Filtros" Width="130" Height="30" Margin="15,20,0,0"
-                            Click="BtnAplicarFiltros_Click"
-                            ToolTip="Aplicar filtros selecionados"
-                            KeyboardNavigation.TabIndex="4"
-                            Style="{StaticResource BlueButtonStyle}"/>
+                    Click="BtnAplicarFiltros_Click"
+                    ToolTip="Aplicar filtros selecionados"
+                    KeyboardNavigation.TabIndex="4"
+                    Style="{StaticResource BlueButtonStyle}"/>
                 </StackPanel>
 
                 <DataGrid x:Name="dgTickets"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          MouseDoubleClick="dgTickets_MouseDoubleClick"
-                          KeyboardNavigation.TabIndex="5"
-                          Height="320"
-                          CanUserResizeColumns="True"
-                          SelectionMode="Single"
-                          GridLinesVisibility="Horizontal"
-                          AlternatingRowBackground="#F0F0F0"
-                          BorderBrush="#DDD"
-                          BorderThickness="1"
-                          ToolTip="Lista de tickets">
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  MouseDoubleClick="dgTickets_MouseDoubleClick"
+                  KeyboardNavigation.TabIndex="5"
+                  Height="320"
+                  CanUserResizeColumns="True"
+                  SelectionMode="Single"
+                  GridLinesVisibility="Horizontal"
+                  AlternatingRowBackground="#F0F0F0"
+                  BorderBrush="#DDD"
+                  BorderThickness="1"
+                  ToolTip="Lista de tickets">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70" />
                         <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*" />
@@ -202,12 +230,13 @@
                 </DataGrid>
 
                 <Button Content="← Voltar" Width="100" Height="35" Margin="0,10,0,0" HorizontalAlignment="Left"
-                        Click="BtnVoltar_Click"
-                        ToolTip="Voltar ao menu principal"
-                        KeyboardNavigation.TabIndex="6"
-                        Style="{StaticResource RedButtonStyle}"/>
+                Click="BtnVoltar_Click"
+                ToolTip="Voltar ao menu principal"
+                KeyboardNavigation.TabIndex="6"
+                Style="{StaticResource RedButtonStyle}"/>
             </StackPanel>
         </Grid>
+
     </Grid>
 </Window>
 
