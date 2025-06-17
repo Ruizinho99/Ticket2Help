@@ -1,4 +1,16 @@
-﻿<Window x:Class="UI.Mapas"
+﻿<!--
+/**
+ * @file Mapas.xaml
+ * @brief Janela de exibição de estatísticas de tickets.
+ *
+ * Esta janela permite ao usuário visualizar estatísticas, aplicar filtros por data e visualizar médias de atendimento por tipo.
+ * Contém controles de seleção de datas, exibição de totais e uma tabela de médias por tipo de ticket.
+ *
+ * @author Paulo
+ *
+ */
+-->
+<Window x:Class="UI.Mapas"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,52 +23,117 @@
         FontSize="14"
         KeyboardNavigation.TabNavigation="Cycle">
 
+    <!--
+    /**
+     * @brief Área reservada para estilos e recursos visuais reutilizáveis.
+     */
+    -->
     <Window.Resources>
-        <!-- Seus estilos existentes -->
+        
     </Window.Resources>
-
+    <!--
+    /**
+     * @brief Layout principal da janela.
+     */
+    -->
     <Grid Margin="20">
         <StackPanel>
 
+            <!--
+            /**
+             * @brief Título principal da página.
+             */
+            -->
             <TextBlock FontWeight="Bold" FontSize="20" 
                        Text="Estatísticas de Tickets" 
                        Margin="0,0,0,20"
                        AutomationProperties.Name="Título da página"/>
 
-            <!-- Filtros de datas -->
+            <!--
+            /**
+             * @brief Seção de filtros por intervalo de datas.
+             */
+            -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,20" VerticalAlignment="Center">
+
+                <!--
+                /**
+                 * @brief Filtro de data inicial.
+                 */
+                -->
                 <TextBlock Text="Data Início:" VerticalAlignment="Center" Width="80" Margin="0,0,10,0" />
                 <DatePicker x:Name="dpDataInicio" SelectedDate="{Binding DataInicioFiltro, Mode=TwoWay}" ToolTip="Selecione a data inicial" />
+
+                <!--
+                /**
+                 * @brief Filtro de data final.
+                 */
+                -->
                 <TextBlock Text="Data Fim:" VerticalAlignment="Center" Width="70" Margin="20,0,10,0" />
                 <DatePicker x:Name="dpDataFim" SelectedDate="{Binding DataFimFiltro, Mode=TwoWay}" ToolTip="Selecione a data final" />
+
+                <!--
+                /**
+                 * @brief Botão que aplica o filtro de datas.
+                 * @details Dispara o evento BtnAplicarFiltro_Click no code-behind.
+                 */
+                -->
                 <Button Content="Aplicar Filtro" Width="120" Margin="20,0,0,0" Click="BtnAplicarFiltro_Click" />
             </StackPanel>
 
-            <!-- Estatísticas gerais -->
+            <!--
+            /**
+             * @brief Exibição do total de tickets filtrados.
+             */
+            -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                 <TextBlock Text="Total Tickets: " FontWeight="SemiBold" Width="180" />
                 <TextBlock Text="{Binding TotalTickets}" />
             </StackPanel>
 
-       
-
+            <!--
+            /**
+             * @brief Exibição do percentual de tickets respondidos.
+             */
+            -->
             <StackPanel Orientation="Horizontal" Margin="0,0,0,20" >
                 <TextBlock Text="Percentual Respondidos: " FontWeight="SemiBold" Width="180"/>
                 <TextBlock Text="{Binding PercentualRespondidos, StringFormat={}{0:P2}}" />
             </StackPanel>
 
+            <!--
+            /**
+             * @brief Subtítulo da tabela de médias de atendimento por tipo de ticket.
+             */
+            -->
             <TextBlock FontWeight="Bold" FontSize="16" Text="Média de Tempo por Tipo:" Margin="0,0,0,10" />
 
+            <!--
+            /**
+             * @brief Tabela que exibe a média de tempo por tipo de ticket.
+             * @details Os dados são carregados da propriedade MediaTempoAtendimentoPorTipoLista.
+             */
+            -->
             <DataGrid ItemsSource="{Binding MediaTempoAtendimentoPorTipoLista}" 
                       AutoGenerateColumns="False" 
                       Height="260" 
                       IsReadOnly="True"
                       KeyboardNavigation.TabIndex="0"
-                      ToolTip="Tabela com a média de tempo por tipo de ticket"
-                      >
+                      ToolTip="Tabela com a média de tempo por tipo de ticket">
 
+                <!--
+                /**
+                 * @brief Coluna que exibe o tipo de ticket.
+                 */
+                -->
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="*"/>
+
+                    <!--
+                    /**
+                     * @brief Coluna que exibe a média de tempo formatada.
+                     */
+                    -->
                     <DataGridTextColumn Header="Média Tempo" Binding="{Binding MediaTempoFormatada}" Width="160"/>
                 </DataGrid.Columns>
             </DataGrid>

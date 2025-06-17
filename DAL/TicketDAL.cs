@@ -47,7 +47,25 @@ namespace DAL
         /// <param name="dataInicio">Data inicial para filtro (opcional).</param>
         /// <param name="dataFim">Data final para filtro (opcional).</param>
         /// <returns>Lista de tickets que correspondem aos filtros.</returns>
+        /// 
+        // Delegate público, que pode ser substituído para mocks nos testes
+        public static Func<string, string, string, string, int, DateTime?, DateTime?, List<Ticket>> ObterTicketsPorAtenderFunc = ObterTicketsPorAtenderImpl;
+
+        // Método público que o resto do sistema chama, e que repassa para o delegate
         public static List<Ticket> ObterTicketsPorAtender(
+            string tipoFiltro,
+            string prioridadeFiltro,
+            string estadoTicketFiltro,
+            string estadoAtendimentoFiltro,
+            int tecnicoLogadoId,
+            DateTime? dataInicio = null,
+            DateTime? dataFim = null)
+        {
+            return ObterTicketsPorAtenderFunc(tipoFiltro, prioridadeFiltro, estadoTicketFiltro, estadoAtendimentoFiltro, tecnicoLogadoId, dataInicio, dataFim);
+        }
+
+        // Método privado com a implementação original da query
+        private static List<Ticket> ObterTicketsPorAtenderImpl(
             string tipoFiltro,
             string prioridadeFiltro,
             string estadoTicketFiltro,
@@ -63,19 +81,19 @@ namespace DAL
                 conn.Open();
 
                 string query = @"
-                SELECT T.Id, T.Tipo, T.SubtipoProblema, T.Prioridade, T.Descricao, T.EstadoTicket, 
-                       T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, T.DataConclusao,
-                       T.IdUtilizador, T.DetalhesTecnico, U.Nome, T.RespondidoPor
-                FROM Ticket T
-                INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
-                WHERE
-                    (@Tipo IS NULL OR T.Tipo = @Tipo)
-                    AND (@Prioridade IS NULL OR T.Prioridade = @Prioridade)
-                    AND (@EstadoTicket IS NULL OR T.EstadoTicket = @EstadoTicket)
-                    AND (@EstadoAtendimento IS NULL OR T.EstadoAtendimento = @EstadoAtendimento)
-                    AND (T.RespondidoPor IS NULL OR T.RespondidoPor = @TecnicoLogadoId)
-                    AND (@DataInicio IS NULL OR T.DataCriacao >= @DataInicio)
-                    AND (@DataFim IS NULL OR T.DataCriacao <= @DataFim)";
+        SELECT T.Id, T.Tipo, T.SubtipoProblema, T.Prioridade, T.Descricao, T.EstadoTicket, 
+               T.EstadoAtendimento, T.DataCriacao, T.DataAtendimento, T.DataConclusao,
+               T.IdUtilizador, T.DetalhesTecnico, U.Nome, T.RespondidoPor
+        FROM Ticket T
+        INNER JOIN Utilizador U ON T.IdUtilizador = U.Id
+        WHERE
+            (@Tipo IS NULL OR T.Tipo = @Tipo)
+            AND (@Prioridade IS NULL OR T.Prioridade = @Prioridade)
+            AND (@EstadoTicket IS NULL OR T.EstadoTicket = @EstadoTicket)
+            AND (@EstadoAtendimento IS NULL OR T.EstadoAtendimento = @EstadoAtendimento)
+            AND (T.RespondidoPor IS NULL OR T.RespondidoPor = @TecnicoLogadoId)
+            AND (@DataInicio IS NULL OR T.DataCriacao >= @DataInicio)
+            AND (@DataFim IS NULL OR T.DataCriacao <= @DataFim)";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -114,6 +132,8 @@ namespace DAL
             return tickets;
         }
 
+
+
         /// <summary>
         /// Obtém uma lista de tickets para fins estatísticos com base nos filtros especificados.
         /// </summary>
@@ -125,6 +145,9 @@ namespace DAL
         /// <param name="dataInicio">Data inicial para filtro (opcional).</param>
         /// <param name="dataFim">Data final para filtro (opcional).</param>
         /// <returns>Lista de tickets que correspondem aos filtros para estatísticas.</returns>
+        public static Func<string, string, string, string, int, DateTime?, DateTime?, List<Ticket>> ObterTicketsEstatisticasFunc
+        = ObterTicketsPorAtender;
+
         public static List<Ticket> ObterTicketsEstatisticas(
             string tipoFiltro,
             string prioridadeFiltro,
@@ -134,8 +157,8 @@ namespace DAL
             DateTime? dataInicio = null,
             DateTime? dataFim = null)
         {
-            // Este método é igual ao anterior, apenas com outro propósito (estatístico)
-            return ObterTicketsPorAtender(tipoFiltro, prioridadeFiltro, estadoTicketFiltro, estadoAtendimentoFiltro, tecnicoLogadoId, dataInicio, dataFim);
+            // Chama o delegate, que por padrão aponta para ObterTicketsPorAtender
+            return ObterTicketsEstatisticasFunc(tipoFiltro, prioridadeFiltro, estadoTicketFiltro, estadoAtendimentoFiltro, tecnicoLogadoId, dataInicio, dataFim);
         }
 
         /// <summary>

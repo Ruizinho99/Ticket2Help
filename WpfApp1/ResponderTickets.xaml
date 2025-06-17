@@ -1,4 +1,13 @@
-﻿<Window x:Class="UI.Views.ResponderTickets"
+﻿<!--!
+    \file ResponderTickets.xaml
+    \brief Janela principal para responder tickets com filtros e listagem.
+
+    Esta janela exibe um menu inicial para navegação e uma seção para
+    aplicar filtros, visualizar tickets e interagir com eles.
+    @author Paulo
+-->
+    
+    <Window x:Class="UI.Views.ResponderTickets"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Responder Tickets" WindowStartupLocation="CenterScreen"
@@ -7,9 +16,19 @@
         FontFamily="Segoe UI"
         FontSize="14"
         KeyboardNavigation.TabNavigation="Cycle">
+    <!--!
+        \brief Recursos da janela contendo estilos e templates personalizados.
 
+        Inclui template para ToggleButton do ComboBox, estilos para ComboBox,
+        botões (logout, primário, secundário), TextBlock para labels e DataGrid.
+    -->
     <Window.Resources>
-        <!-- ToggleButton para o ComboBox -->
+        <!--!
+            \brief Template personalizado para ToggleButton do ComboBox.
+
+            Controla a aparência da seta, estado ao passar o mouse,
+            estado clicado e desabilitado.
+        -->
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Border x:Name="Border"
       Background="Transparent"
@@ -38,8 +57,9 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
-        <!-- Estilo completo -->
+        <!--!
+            \brief Estilo moderno para ComboBox com bordas arredondadas e popup personalizado.
+        -->
         <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -130,10 +150,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--!
+            \brief Estilo para botão de logout.
 
+            Botão vermelho com aparência semelhante ao Bootstrap.
+        -->
         <Style x:Key="LogoutButton" TargetType="Button">
             <Setter Property="Background" Value="#D9534F"/>
-            <!-- vermelho bootstrap -->
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -163,7 +186,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!-- Estilo botões primários -->
+        <!--!
+            \brief Estilo para botões primários.
+
+            Botões azuis usados para ações principais.
+        -->
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="#007ACC"/>
             <Setter Property="Foreground" Value="White"/>
@@ -196,7 +223,11 @@
             </Setter>
         </Style>
 
-        <!-- Estilo botão secundário -->
+        <!--!
+            \brief Estilo para botões secundários.
+
+            Baseado no PrimaryButton com cor cinza para ações secundárias.
+        -->
         <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
             <Setter Property="Background" Value="#6C757D"/>
             <Setter Property="Foreground" Value="White"/>
@@ -222,14 +253,21 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--!
+            \brief Estilo para TextBlock utilizado em labels.
 
-        <!-- Estilo para TextBlock de labels -->
+            Define peso da fonte e alinhamento vertical.
+        -->
         <Style TargetType="TextBlock" x:Key="LabelTextBlock">
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <!-- Estilo DataGrid -->
+        <!--!
+            \brief Estilo para DataGrid.
+
+            Configura aparência, alternância de linhas e comportamento de seleção.
+        -->
         <Style TargetType="DataGrid">
             <Setter Property="RowBackground" Value="White"/>
             <Setter Property="AlternatingRowBackground" Value="#F9F9F9"/>
@@ -243,20 +281,40 @@
             <Setter Property="Margin" Value="0,0,0,10"/>
         </Style>
     </Window.Resources>
+    <!--!
+        \brief Layout principal da janela.
 
+        Grid com margem que contém as seções da interface.
+    -->
     <Grid Margin="15">
-        <!-- Menu Inicial -->
+        <!--!
+            \brief Menu inicial com botões para navegar entre funcionalidades.
+
+            Contém botões para responder tickets, ver mapas e logout.
+        -->
         <StackPanel x:Name="MainMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Visible" Width="220" >
             <Button Content="Responder Tickets" Style="{StaticResource PrimaryButton}" Height="42" Click="BtnResponderTickets_Click" AutomationProperties.Name="Botão Responder Tickets"/>
             <Button Content="Ver Mapas" Style="{StaticResource PrimaryButton}" Height="42" Click="BtnVerMapas_Click" AutomationProperties.Name="Botão Ver Mapas"/>
             <Button Content="Logout" Style="{StaticResource LogoutButton}" Height="42" Click="BtnLogout_Click" AutomationProperties.Name="Botão Logout"/>
         </StackPanel>
+        <!--!
+            \brief Seção para responder tickets.
 
+            Inicialmente oculta, esta seção apresenta filtros,
+            listagem de tickets em cartões e botão para voltar.
+        -->
         <StackPanel x:Name="ResponderSection" Visibility="Collapsed" Margin="0,0,0,0">
-            <!-- Filtros -->
+            <!--!
+                \brief Grupo de filtros para pesquisa de tickets.
+
+                Contém filtros para tipo, prioridade, estado, data e ordenação,
+                além do botão para aplicar os filtros.
+            -->
             <GroupBox Header="Filtros" Margin="0,0,0,10" Padding="15">
                 <StackPanel Orientation="Vertical">
-                    <!-- Linha 1: Tipo e Prioridade -->
+                    <!--!
+                        \brief Linha 1 dos filtros: Tipo e Prioridade.
+                    -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Tipo:" Width="90" Style="{StaticResource LabelTextBlock}" />
                         <ComboBox x:Name="cbFiltroTipo" Width="150" SelectedIndex="0"
@@ -278,7 +336,9 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Linha 2: Estado Ticket e Estado Atendimento -->
+                    <!--!
+                        \brief Linha 2 dos filtros: Estado do Ticket e Estado de Atendimento.
+                    -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Estado Ticket:" Width="90" Style="{StaticResource LabelTextBlock}" />
                         <ComboBox x:Name="cbFiltroEstadoTicket" Width="150" SelectedIndex="0"
@@ -301,7 +361,9 @@
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Linha 3: Data Início e Data Fim -->
+                    <!--!
+                        \brief Linha 3 dos filtros: Data Início e Data Fim.
+                    -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                         <TextBlock Text="Data Início:" Width="90" Style="{StaticResource LabelTextBlock}" />
                         <DatePicker x:Name="dpDataInicio" Width="150" AutomationProperties.Name="Filtro Data Início"/>
@@ -309,8 +371,9 @@
                         <TextBlock Text="Data Fim:" Width="90" Margin="20,0,0,0" Style="{StaticResource LabelTextBlock}" />
                         <DatePicker x:Name="dpDataFim" Width="150" AutomationProperties.Name="Filtro Data Fim"/>
                     </StackPanel>
-
-                    <!-- Linha 4: Ordenar Por e Botão Aplicar -->
+                    <!--!
+                        \brief Linha 4 dos filtros: Ordenar Por e botão Aplicar Filtros.
+                    -->
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,15" VerticalAlignment="Center">
                         <TextBlock Text="Ordenar Por:" Width="90" Style="{StaticResource LabelTextBlock}" />
                         <ComboBox x:Name="cbOrdenarPor" Width="320" SelectedIndex="3"
@@ -328,12 +391,20 @@
                 </StackPanel>
             </GroupBox>
 
-            <!-- Área para exibir os tickets em cartões -->
+            <!--!
+                \brief Área para exibir os tickets como cartões em painel de rolagem.
+
+                WrapPanel organiza os cartões, ScrollViewer permite rolagem vertical.
+            -->
             <ScrollViewer Height="500" VerticalScrollBarVisibility="Auto" Margin="0,0,0,10">
                 <WrapPanel x:Name="TicketsPanel" ItemWidth="250" ItemHeight="Auto" Margin="10" />
             </ScrollViewer>
 
-            <!-- Botão Voltar -->
+            <!--!
+                \brief Botão para voltar ao menu inicial.
+
+                Botão com estilo secundário posicionado no canto direito.
+            -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Voltar" Style="{StaticResource SecondaryButton}" Width="120" Click="BtnVoltar_Click" AutomationProperties.Name="Botão Voltar"/>
             </StackPanel>

@@ -1,27 +1,39 @@
-﻿<Window x:Class="UI.UserTickets"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Área do Utilizador" Height="500" Width="800"
-        
-        WindowState="Maximized"
-        WindowStartupLocation="CenterScreen"
-        Background="#FAFAFA"
-        FontFamily="Segoe UI" FontSize="14"
-        KeyboardNavigation.TabNavigation="Cycle">
+﻿<!--!
+    @file UserTickets.xaml
+    @brief Interface gráfica da área do utilizador para gestão de tickets.
 
+    Esta janela contém as páginas para:
+    - Menu principal com opções para criar ticket, ver tickets e logout.
+    - Formulário para criação de novos tickets.
+    - Visualização e filtragem dos tickets existentes.
+
+    @author Paulo
+-->
+<Window x:Class="UI.UserTickets"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Área do Utilizador" Height="500" Width="800"
+    WindowState="Maximized"
+    WindowStartupLocation="CenterScreen"
+    Background="#FAFAFA"
+    FontFamily="Segoe UI" FontSize="14"
+    KeyboardNavigation.TabNavigation="Cycle">
+
+    <!--! Recursos reutilizáveis para estilo e templates -->
     <Window.Resources>
-        <!-- ToggleButton para o ComboBox -->
+
+        <!--! Template para o botão toggle do ComboBox (seta para abrir/fechar) -->
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Border x:Name="Border"
-            Background="Transparent"
-            BorderBrush="Transparent"
-            BorderThickness="1"
-            Padding="5">
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    BorderThickness="1"
+                    Padding="5">
                 <Path x:Name="Arrow"
-              Data="M 0 0 L 4 4 L 8 0 Z"
-              Fill="#666"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Center"/>
+                      Data="M 0 0 L 4 4 L 8 0 Z"
+                      Fill="#666"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -40,7 +52,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
-        <!-- Estilo completo -->
+        <!--! Estilo moderno para ComboBox com bordas arredondadas e efeitos visuais -->
         <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -54,66 +66,63 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <!-- Borda visível e arredondada -->
+                            <!--! Borda visível e arredondada -->
                             <Border x:Name="MainBorder"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="6"
-                            SnapsToDevicePixels="True">
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6"
+                                    SnapsToDevicePixels="True">
                                 <Grid>
-                                    <!-- ToggleButton -->
+                                    <!--! ToggleButton para abrir/fechar ComboBox -->
                                     <ToggleButton x:Name="ToggleButton"
-                                          Template="{StaticResource ComboBoxToggleButton}"
-                                          Focusable="False"
-                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          ClickMode="Press"
-                                          Background="Transparent"
-                                          BorderBrush="Transparent"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          Width="20"
-                                          Margin="0,0,5,0"/>
-
-                                    <!-- Item Selecionado -->
+                                                  Template="{StaticResource ComboBoxToggleButton}"
+                                                  Focusable="False"
+                                                  IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  ClickMode="Press"
+                                                  Background="Transparent"
+                                                  BorderBrush="Transparent"
+                                                  HorizontalAlignment="Right"
+                                                  VerticalAlignment="Center"
+                                                  Width="20"
+                                                  Margin="0,0,5,0"/>
+                                    <!--! Apresentação do item selecionado -->
                                     <ContentPresenter x:Name="ContentSite"
-                                              Margin="10,4,30,4"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Left"
-                                              Content="{TemplateBinding SelectionBoxItem}"
-                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              IsHitTestVisible="False"/>
-
+                                                      Margin="10,4,30,4"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                                      IsHitTestVisible="False"/>
                                 </Grid>
                             </Border>
 
-                            <!-- Popup -->
+                            <!--! Popup que exibe os itens do ComboBox -->
                             <Popup x:Name="PART_Popup"
-                           Placement="Bottom"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           PopupAnimation="Slide">
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
                                 <Border x:Name="PopupBorder"
-                                Background="White"
-                                BorderBrush="#CCCCCC"
-                                BorderThickness="1"
-                                CornerRadius="6"
-                                SnapsToDevicePixels="True"
-                                Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                >
+                                        Background="White"
+                                        BorderBrush="#CCCCCC"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        SnapsToDevicePixels="True"
+                                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ComboBox}}">
                                     <ScrollViewer Margin="4"
-                                          SnapsToDevicePixels="True"
-                                          CanContentScroll="True">
+                                                  SnapsToDevicePixels="True"
+                                                  CanContentScroll="True">
                                         <StackPanel IsItemsHost="True"
-                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                                    KeyboardNavigation.DirectionalNavigation="Contained"/>
                                     </ScrollViewer>
                                 </Border>
                             </Popup>
                         </Grid>
 
-                        <!-- Efeitos Visuais -->
+                        <!--! Triggers para efeitos visuais -->
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="MainBorder" Property="BorderBrush" Value="#007ACC"/>
@@ -132,9 +141,7 @@
             </Setter>
         </Style>
 
-
-
-        <!-- Estilo para botões azuis (ações principais) -->
+        <!--! Estilo para botões principais em azul -->
         <Style x:Key="BlueButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#007ACC"/>
             <Setter Property="Foreground" Value="White"/>
@@ -168,7 +175,7 @@
             </Setter>
         </Style>
 
-        <!-- Estilo para botões vermelhos (Voltar e Logout) -->
+        <!--! Estilo para botões vermelhos (Voltar e Logout), baseado no estilo azul -->
         <Style x:Key="RedButtonStyle" TargetType="Button" BasedOn="{StaticResource BlueButtonStyle}">
             <Setter Property="Background" Value="#D9534F"/>
             <Setter Property="Foreground" Value="White"/>
@@ -199,20 +206,22 @@
     </Window.Resources>
 
     <Grid Margin="20">
-
-        <!-- Página Inicial -->
+        <!--! Página inicial com opções do menu principal -->
         <Grid x:Name="MainMenuGrid" Visibility="Visible">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="220" >
+                <!--! Botão para criar novo ticket -->
                 <Button Content="Criar Ticket" Height="45" Margin="0,0,0,15" 
                         Click="BtnCriarTicket_Click"
                         ToolTip="Clique para criar um novo ticket"
                         KeyboardNavigation.TabIndex="0"
                         Style="{StaticResource BlueButtonStyle}"/>
+                <!--! Botão para visualizar tickets -->
                 <Button Content="Ver Tickets" Height="45" Margin="0,0,0,15" 
                         Click="BtnVerTickets_Click"
                         ToolTip="Clique para visualizar seus tickets"
                         KeyboardNavigation.TabIndex="1"
                         Style="{StaticResource BlueButtonStyle}"/>
+                <!--! Botão para logout -->
                 <Button Content="Logout" Height="45"
                         Click="BtnLogout_Click"
                         ToolTip="Clique para sair do sistema"
@@ -220,81 +229,76 @@
                         Style="{StaticResource RedButtonStyle}"/>
             </StackPanel>
         </Grid>
-        <!-- Página Criar Ticket -->
+
+        <!--! Página para criação de um novo ticket -->
         <Grid x:Name="CriarTicketGrid" Visibility="Collapsed" Margin="10">
             <StackPanel MaxWidth="400" HorizontalAlignment="Center" VerticalAlignment="Top" >
-
+                <!--! Seleção do tipo de ticket -->
                 <Label Content="Tipo:" Target="{Binding ElementName=cbTipo}" FontWeight="SemiBold" />
                 <ComboBox x:Name="cbTipo" Margin="0,5,0,15" SelectionChanged="cbTipo_SelectionChanged"
-          KeyboardNavigation.TabIndex="0"
-          ToolTip="Selecione o tipo de ticket"
-          Style="{StaticResource ModernComboBoxStyle}">
+                          KeyboardNavigation.TabIndex="0"
+                          ToolTip="Selecione o tipo de ticket"
+                          Style="{StaticResource ModernComboBoxStyle}">
                     <ComboBoxItem>Hardware</ComboBoxItem>
                     <ComboBoxItem>Software</ComboBoxItem>
                 </ComboBox>
 
-
-
-
+                <!--! Seleção do subtipo do problema -->
                 <Label Content="Tipo de Problema:" Target="{Binding ElementName=cbSubtipoProblema}" FontWeight="SemiBold"/>
-                <!-- ComboBox Subtipo Problema -->
                 <ComboBox x:Name="cbSubtipoProblema"
-          Margin="0,5,0,15"
-          KeyboardNavigation.TabIndex="1"
-          ToolTip="Selecione o subtipo do problema"
-          Style="{StaticResource ModernComboBoxStyle}"/>
+                          Margin="0,5,0,15"
+                          KeyboardNavigation.TabIndex="1"
+                          ToolTip="Selecione o subtipo do problema"
+                          Style="{StaticResource ModernComboBoxStyle}"/>
 
-                <!-- Label Prioridade -->
-                <Label Content="Prioridade:" 
-       Target="{Binding ElementName=cbPrioridade}" 
-       FontWeight="SemiBold"/>
-
-                <!-- ComboBox Prioridade -->
+                <!--! Seleção da prioridade do ticket -->
+                <Label Content="Prioridade:" Target="{Binding ElementName=cbPrioridade}" FontWeight="SemiBold"/>
                 <ComboBox x:Name="cbPrioridade"
-          Margin="0,5,0,15"
-          KeyboardNavigation.TabIndex="2"
-          ToolTip="Selecione a prioridade do ticket"
-          Style="{StaticResource ModernComboBoxStyle}">
+                          Margin="0,5,0,15"
+                          KeyboardNavigation.TabIndex="2"
+                          ToolTip="Selecione a prioridade do ticket"
+                          Style="{StaticResource ModernComboBoxStyle}">
                     <ComboBoxItem>Baixa</ComboBoxItem>
                     <ComboBoxItem>Média</ComboBoxItem>
                     <ComboBoxItem>Alta</ComboBoxItem>
                 </ComboBox>
 
-
+                <!--! Campo para descrição detalhada do problema -->
                 <Label Content="Descrição:" Target="{Binding ElementName=txtDescricao}" FontWeight="SemiBold"/>
                 <TextBox x:Name="txtDescricao" Margin="0,5,0,15" Height="100" AcceptsReturn="True" TextWrapping="Wrap"
-                 KeyboardNavigation.TabIndex="3"
-                 ToolTip="Descreva detalhadamente o problema"/>
+                         KeyboardNavigation.TabIndex="3"
+                         ToolTip="Descreva detalhadamente o problema"/>
 
+                <!--! Botões de submissão do ticket e voltar ao menu -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" >
                     <Button Content="Submeter Ticket" Width="140" Height="40" Margin="0,0,10,0"
-                    Click="BtnSubmeter_Click"
-                    ToolTip="Enviar ticket"
-                    KeyboardNavigation.TabIndex="4"
-                    Style="{StaticResource BlueButtonStyle}"/>
+                            Click="BtnSubmeter_Click"
+                            ToolTip="Enviar ticket"
+                            KeyboardNavigation.TabIndex="4"
+                            Style="{StaticResource BlueButtonStyle}"/>
                     <Button Content="← Voltar" Width="100" Height="40"
-                    Click="BtnVoltar_Click"
-                    ToolTip="Voltar ao menu principal"
-                    KeyboardNavigation.TabIndex="5"
-                    Style="{StaticResource RedButtonStyle}"/>
+                            Click="BtnVoltar_Click"
+                            ToolTip="Voltar ao menu principal"
+                            KeyboardNavigation.TabIndex="5"
+                            Style="{StaticResource RedButtonStyle}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
 
-        <!-- Página Ver Tickets -->
+        <!--! Página para visualização e filtragem dos tickets existentes -->
         <Grid x:Name="VerTicketsGrid" Visibility="Collapsed" Margin="10">
             <StackPanel Orientation="Vertical" MaxWidth="1200" HorizontalAlignment="Center">
 
-                <!-- Filtros -->
+                <!--! Filtros para pesquisa de tickets -->
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,15" HorizontalAlignment="Center">
 
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Tipo:" Target="{Binding ElementName=cbFiltroTipo}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbFiltroTipo" Width="120" Margin="0,5,0,0"
-                  KeyboardNavigation.TabIndex="0"
-                  ToolTip="Filtrar por tipo de ticket"
-                  SelectedIndex="0"
-                  Style="{StaticResource ModernComboBoxStyle}">
+                                  KeyboardNavigation.TabIndex="0"
+                                  ToolTip="Filtrar por tipo de ticket"
+                                  SelectedIndex="0"
+                                  Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todos</ComboBoxItem>
                             <ComboBoxItem>Hardware</ComboBoxItem>
                             <ComboBoxItem>Software</ComboBoxItem>
@@ -304,10 +308,10 @@
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Prioridade:" Target="{Binding ElementName=cbFiltroPrioridade}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbFiltroPrioridade" Width="120" Margin="0,5,0,0"
-                  KeyboardNavigation.TabIndex="1"
-                  ToolTip="Filtrar por prioridade"
-                  SelectedIndex="0"
-                  Style="{StaticResource ModernComboBoxStyle}">
+                                  KeyboardNavigation.TabIndex="1"
+                                  ToolTip="Filtrar por prioridade"
+                                  SelectedIndex="0"
+                                  Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todas</ComboBoxItem>
                             <ComboBoxItem>Baixa</ComboBoxItem>
                             <ComboBoxItem>Média</ComboBoxItem>
@@ -318,10 +322,10 @@
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Estado:" Target="{Binding ElementName=cbFiltroEstado}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbFiltroEstado" Width="120" Margin="0,5,0,0"
-                  KeyboardNavigation.TabIndex="2"
-                  ToolTip="Filtrar por estado do ticket"
-                  SelectedIndex="0"
-                  Style="{StaticResource ModernComboBoxStyle}">
+                                  KeyboardNavigation.TabIndex="2"
+                                  ToolTip="Filtrar por estado do ticket"
+                                  SelectedIndex="0"
+                                  Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Todos</ComboBoxItem>
                             <ComboBoxItem>Por resolver</ComboBoxItem>
                             <ComboBoxItem>Em atendimento</ComboBoxItem>
@@ -332,38 +336,50 @@
                     <StackPanel Margin="5,0" VerticalAlignment="Center">
                         <Label Content="Ordenar por:" Target="{Binding ElementName=cbOrdenarPor}" FontWeight="SemiBold"/>
                         <ComboBox x:Name="cbOrdenarPor" Width="140" Margin="0,5,0,0"
-                  KeyboardNavigation.TabIndex="3"
-                  ToolTip="Ordenar lista de tickets"
-                  SelectedIndex="3"
-                  Style="{StaticResource ModernComboBoxStyle}">
-                            <ComboBoxItem>ID Ascendente</ComboBoxItem>
-                            <ComboBoxItem>ID Descendente</ComboBoxItem>
+                                  KeyboardNavigation.TabIndex="3"
+                                  ToolTip="Ordenar lista de tickets"
+                                  SelectedIndex="3"
+                                  Style="{StaticResource ModernComboBoxStyle}">
                             <ComboBoxItem>Data Ascendente</ComboBoxItem>
                             <ComboBoxItem>Data Descendente</ComboBoxItem>
+                            <ComboBoxItem>Prioridade Ascendente</ComboBoxItem>
+                            <ComboBoxItem>Prioridade Descendente</ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
 
-                    <Button Content="Aplicar Filtros" Width="130" Height="30" Margin="15,20,0,0"
-            Click="BtnAplicarFiltros_Click"
-            ToolTip="Aplicar filtros selecionados"
-            KeyboardNavigation.TabIndex="4"
-            Style="{StaticResource BlueButtonStyle}"/>
+                    <Button Content="Aplicar Filtros" Height="35" Margin="20,10,0,0"
+                            Click="BtnAplicarFiltros_Click"
+                            ToolTip="Filtrar tickets"
+                            KeyboardNavigation.TabIndex="4"
+                            Style="{StaticResource BlueButtonStyle}"/>
                 </StackPanel>
 
-                <!-- Apresentação moderna em cartões -->
-                <ScrollViewer Height="500" VerticalScrollBarVisibility="Auto">
-                    <WrapPanel x:Name="TicketsPanel" ItemWidth="250" ItemHeight="Auto" Margin="10" />
-                </ScrollViewer>
+                <!--! DataGrid para exibir os tickets filtrados -->
+                <DataGrid x:Name="dgTickets" AutoGenerateColumns="False" CanUserAddRows="False" 
+                          HeadersVisibility="Column" 
+                          Width="Auto" Height="350"
+                          SelectionMode="Single"
+                          KeyboardNavigation.TabIndex="5"
+                          ToolTip="Lista de tickets">
 
-                <Button Content="← Voltar" Width="100" Height="35" Margin="0,10,0,0" HorizontalAlignment="Left"
-        Click="BtnVoltar_Click"
-        ToolTip="Voltar ao menu principal"
-        KeyboardNavigation.TabIndex="6"
-        Style="{StaticResource RedButtonStyle}"/>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Tipo" Binding="{Binding Tipo}" Width="120" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Subtipo" Binding="{Binding Subtipo}" Width="140" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Prioridade" Binding="{Binding Prioridade}" Width="100" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="120" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Data Criação" Binding="{Binding DataCriacao, StringFormat=d}" Width="120" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Descrição" Binding="{Binding Descricao}" Width="*" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!--! Botão para voltar ao menu principal -->
+                <Button Content="← Voltar" Width="100" Height="40" Margin="0,15,0,0"
+                        Click="BtnVoltar_Click"
+                        ToolTip="Voltar ao menu principal"
+                        KeyboardNavigation.TabIndex="6"
+                        Style="{StaticResource RedButtonStyle}"/>
             </StackPanel>
         </Grid>
-
-
     </Grid>
 </Window>
-

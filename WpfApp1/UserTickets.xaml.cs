@@ -10,10 +10,20 @@ using System.Windows.Media;
 
 namespace UI
 {
+    /// <summary>
+    /// Janela para exibir e criar tickets associados a um utilizador.
+    /// </summary>
     public partial class UserTickets : Window
     {
+        /// <summary>
+        /// Utilizador atualmente autenticado.
+        /// </summary>
         private Utilizador utilizador;
 
+        /// <summary>
+        /// Construtor da janela UserTickets.
+        /// </summary>
+        /// <param name="utilizador">Instância do utilizador atual.</param>
         public UserTickets(Utilizador utilizador)
         {
             InitializeComponent();
@@ -21,10 +31,17 @@ namespace UI
 
             MessageBox.Show($"ID do utilizador atual: {utilizador?.Id}");
 
-            CarregarTicketsSubmetidos(); // Carrega tickets do utilizador
+            CarregarTicketsSubmetidos(); ///< Carrega os tickets submetidos pelo utilizador
         }
 
-        // Método atualizado para carregar tickets no layout de cards
+        /**
+         * @brief Carrega os tickets do utilizador com opções de filtro e ordenação.
+         * 
+         * @param tipoFiltro Filtro pelo tipo do ticket (opcional).
+         * @param prioridadeFiltro Filtro pela prioridade do ticket (opcional).
+         * @param estadoFiltro Filtro pelo estado do ticket (opcional).
+         * @param ordenarPor Critério para ordenar os tickets (opcional).
+         */
         private void CarregarTicketsSubmetidos(string tipoFiltro = null, string prioridadeFiltro = null, string estadoFiltro = null, string ordenarPor = null)
         {
             var tickets = TicketDAL.ObterTicketsDoUtilizador(utilizador.Id);
@@ -57,10 +74,14 @@ namespace UI
                     break;
             }
 
-            PreencherTickets(tickets); // Exibir os tickets como cards
+            PreencherTickets(tickets);
         }
 
-        // Novo método para criar os cards visualmente
+        /**
+         * @brief Cria visualmente os cards de tickets na interface.
+         * 
+         * @param tickets Lista de tickets a exibir.
+         */
         private void PreencherTickets(List<Ticket> tickets)
         {
             TicketsPanel.Children.Clear();
@@ -101,7 +122,7 @@ namespace UI
 
                 border.Child = stack;
 
-                // Adiciona evento de clique no card
+                // Evento para abrir detalhes do ticket ao clicar no card
                 border.MouseLeftButtonUp += (s, e) =>
                 {
                     DetalhesTicket detalhesWindow = new DetalhesTicket(ticket);
@@ -112,7 +133,12 @@ namespace UI
             }
         }
 
-        // Define a cor do estado do ticket
+        /**
+         * @brief Retorna uma cor correspondente ao estado do ticket.
+         * 
+         * @param estado Estado atual do ticket.
+         * @return Brush Cor associada ao estado.
+         */
         private Brush GetEstadoColor(string estado)
         {
             switch (estado)
@@ -128,7 +154,12 @@ namespace UI
             }
         }
 
-        // Aplica filtros e ordenação
+        /**
+         * @brief Evento para aplicar filtros e ordenação ao clicar no botão de aplicar filtros.
+         * 
+         * @param sender Objeto que disparou o evento.
+         * @param e Argumentos do evento.
+         */
         private void BtnAplicarFiltros_Click(object sender, RoutedEventArgs e)
         {
             string tipoFiltro = (cbFiltroTipo.SelectedItem as ComboBoxItem)?.Content.ToString();
@@ -139,6 +170,12 @@ namespace UI
             CarregarTicketsSubmetidos(tipoFiltro, prioridadeFiltro, estadoFiltro, ordenarPor);
         }
 
+        /**
+         * @brief Evento para submeter um novo ticket.
+         * 
+         * @param sender Objeto que disparou o evento.
+         * @param e Argumentos do evento.
+         */
         private void BtnSubmeter_Click(object sender, RoutedEventArgs e)
         {
             if (cbTipo.SelectedItem == null ||
@@ -182,6 +219,12 @@ namespace UI
             }
         }
 
+        /**
+         * @brief Evento para alterar a lista de subtipos conforme o tipo selecionado.
+         * 
+         * @param sender Objeto que disparou o evento.
+         * @param e Argumentos do evento de seleção.
+         */
         private void cbTipo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cbSubtipoProblema.Items.Clear();
@@ -204,12 +247,18 @@ namespace UI
             }
         }
 
+        /// <summary>
+        /// Exibe o formulário para criar um novo ticket.
+        /// </summary>
         private void BtnCriarTicket_Click(object sender, RoutedEventArgs e)
         {
             MainMenuGrid.Visibility = Visibility.Collapsed;
             CriarTicketGrid.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Exibe a visualização dos tickets do utilizador.
+        /// </summary>
         private void BtnVerTickets_Click(object sender, RoutedEventArgs e)
         {
             MainMenuGrid.Visibility = Visibility.Collapsed;
@@ -217,6 +266,9 @@ namespace UI
             CarregarTicketsSubmetidos();
         }
 
+        /// <summary>
+        /// Volta para o menu principal, ocultando outros grids.
+        /// </summary>
         private void BtnVoltar_Click(object sender, RoutedEventArgs e)
         {
             CriarTicketGrid.Visibility = Visibility.Collapsed;
@@ -224,6 +276,9 @@ namespace UI
             MainMenuGrid.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Realiza logout e exibe a janela de login.
+        /// </summary>
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
         {
             LoginWindow loginWindow = new LoginWindow();

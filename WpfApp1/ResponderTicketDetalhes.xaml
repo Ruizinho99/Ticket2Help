@@ -1,4 +1,11 @@
-﻿<Window x:Class="UI.Views.ResponderTicketDetalhes"
+﻿<!--!
+    \file ResponderTicketDetalhes.xaml
+    \brief Janela para responder um ticket com campos para estado e resposta.
+
+    A janela permite ao usuário selecionar o estado atual do ticket, digitar a resposta e salvar ou cancelar a operação.
+    @author Paulo
+-->
+    <Window x:Class="UI.Views.ResponderTicketDetalhes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Responder Ticket" Height="400" Width="520" WindowStartupLocation="CenterOwner"
@@ -6,9 +13,17 @@
         FontFamily="Segoe UI"
         FontSize="14"
         KeyboardNavigation.TabNavigation="Cycle">
+    <!--!
+        \brief Recursos da janela contendo estilos e templates personalizados.
 
+        Inclui template para ToggleButton do ComboBox, estilos para ComboBox, botões primários e de perigo, e TextBox multiline.
+    -->
     <Window.Resources>
-        <!-- ToggleButton para o ComboBox -->
+        <!--!
+            \brief Template personalizado para ToggleButton usado no ComboBox.
+
+            Apresenta seta com comportamento visual ao passar o mouse, clicado e desabilitado.
+        -->
         <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
             <Border x:Name="Border"
   Background="Transparent"
@@ -38,7 +53,9 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
 
-        <!-- Estilo completo -->
+        <!--!
+            \brief Estilo moderno para ComboBox com borda arredondada e popup personalizado.
+        -->
         <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -129,7 +146,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!-- Estilo botões primários -->
+        <!--!
+            \brief Estilo para botões primários.
+
+            Usado para ações principais como salvar, com cores e efeitos visuais apropriados.
+        -->
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="#007ACC"/>
             <Setter Property="Foreground" Value="White"/>
@@ -162,7 +183,11 @@
             </Setter>
         </Style>
 
-        <!-- Estilo botão vermelho para cancelar -->
+        <!--!
+            \brief Estilo para botões de perigo (vermelho).
+
+            Usado para ações de cancelamento ou exclusão.
+        -->
         <Style x:Key="DangerButton" TargetType="Button">
             <Setter Property="Background" Value="#D9534F"/>
             <Setter Property="Foreground" Value="White"/>
@@ -195,7 +220,11 @@
             </Setter>
         </Style>
 
-        <!-- Estilo TextBox multiline com foco destacado -->
+        <!--!
+            \brief Estilo para TextBox multiline com foco destacado.
+
+            Permite múltiplas linhas e ajusta visual da borda ao focar.
+        -->
         <Style TargetType="TextBox" x:Key="MultilineTextBoxStyle">
             <Setter Property="BorderBrush" Value="#CCC"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -225,7 +254,11 @@
             </Setter>
         </Style>
     </Window.Resources>
+    <!--!
+        \brief Layout principal da janela.
 
+        Utiliza Grid para organizar título, seleção do estado, campo de resposta e botões.
+    -->
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -233,11 +266,16 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
+        <!--!
+            \brief Título da janela.
+        -->
         <TextBlock Text="Responder ao Ticket" FontSize="20" FontWeight="Bold" Margin="0 0 0 15" 
                    AutomationProperties.Name="Título da janela"/>
+        <!--!
+            \brief Seção para seleção do estado atual do ticket.
 
-        <!-- Estado do Ticket -->
+            Contém Label e ComboBox com opções: "porAtender", "emAtendimento", "atendido".
+        -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 15" VerticalAlignment="Center">
             <Label Content="Estado do Ticket:" Target="{Binding ElementName=cmbEstadoTicket}" 
            VerticalAlignment="Center" FontWeight="SemiBold" Margin="0 0 10 0" />
@@ -252,8 +290,11 @@
             </ComboBox>
         </StackPanel>
 
+        <!--!
+            \brief Campo para digitar a resposta ao ticket.
 
-        <!-- Campo de Resposta -->
+            TextBox multilinha com estilo personalizado para melhor usabilidade.
+        -->
         <StackPanel Grid.Row="2" Margin="0 0 0 15">
             <Label Content="Resposta:" Target="{Binding ElementName=txtResposta}" 
                    FontWeight="SemiBold" Margin="0 0 0 5"/>
@@ -263,7 +304,11 @@
                      AutomationProperties.Name="Campo de resposta"/>
         </StackPanel>
 
-        <!-- Botões -->
+        <!--!
+            \brief Botões para salvar ou cancelar a resposta.
+
+            Botão "Guardar" com estilo primário e "Cancelar" com estilo de perigo.
+        -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Guardar" Style="{StaticResource PrimaryButton}" Width="90" Click="Guardar_Click" KeyboardNavigation.TabIndex="2" ToolTip="Salvar resposta" AutomationProperties.Name="Botão Guardar"/>
             <Button Content="Cancelar" Style="{StaticResource DangerButton}" Width="90" Click="Cancelar_Click" KeyboardNavigation.TabIndex="3" ToolTip="Cancelar e fechar janela" AutomationProperties.Name="Botão Cancelar"/>

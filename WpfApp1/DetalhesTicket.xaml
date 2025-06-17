@@ -1,4 +1,16 @@
-﻿<Window x:Class="UI.DetalhesTicket"
+﻿<!--
+/**
+ * @file DetalhesTicket.xaml
+ * @brief Interface gráfica para exibição e atualização dos detalhes de um ticket.
+ * 
+ * Esta janela apresenta informações gerais, estado do atendimento e informações técnicas
+ * de um ticket específico no sistema de gestão.
+ *
+ * @author Paulo
+ * 
+ */
+-->
+<Window x:Class="UI.DetalhesTicket"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Detalhes do Ticket"
@@ -8,9 +20,17 @@
         FontFamily="Segoe UI"
         FontSize="14"
         KeyboardNavigation.TabNavigation="Cycle">
-
+    <!--
+    /**
+     * @brief Recursos e estilos reutilizáveis definidos para a janela.
+     */
+    -->
     <Window.Resources>
-        <!-- Estilo para GroupBox com borda suave -->
+        <!--
+        /**
+         * @brief Estilo para GroupBox com bordas suaves e cabeçalho personalizado.
+         */
+        -->
         <Style TargetType="GroupBox">
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Margin" Value="0,0,0,20"/>
@@ -43,21 +63,34 @@
             </Setter>
         </Style>
 
-        <!-- Estilo para TextBlock de rótulos -->
+        <!--
+        /**
+         * @brief Estilo para rótulos (TextBlock) em negrito.
+         */
+        -->
         <Style x:Key="LabelTextBlock" TargetType="TextBlock">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#333"/>
             <Setter Property="Margin" Value="0,4,0,4"/>
         </Style>
 
-        <!-- Estilo para valores (TextBlocks) -->
+        <!--
+        /**
+         * @brief Estilo para valores apresentados (TextBlock) com texto leve e quebra automática.
+         */
+        -->
         <Style x:Key="ValueTextBlock" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#555"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="Margin" Value="0,4,0,4"/>
         </Style>
 
-        <!-- Botão com acessibilidade -->
+
+        <!--
+        /**
+         * @brief Estilo para botões com foco em acessibilidade e usabilidade.
+         */
+        -->
         <Style TargetType="Button">
             <Setter Property="Background" Value="#007ACC"/>
             <Setter Property="Foreground" Value="White"/>
@@ -95,10 +128,18 @@
             </Setter>
         </Style>
     </Window.Resources>
-
+    <!--
+    /**
+     * @brief Estrutura principal com rolagem que contém todas as seções da janela.
+     */
+    -->
     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20" Focusable="True">
         <StackPanel>
-
+            <!--
+            /**
+             * @brief Título da janela exibido no topo da tela.
+             */
+            -->
             <TextBlock Text="Detalhes do Ticket" 
                        FontWeight="Bold" 
                        FontSize="24" 
@@ -106,7 +147,11 @@
                        Margin="0,0,0,30" 
                        HorizontalAlignment="Center"
                        AutomationProperties.Name="Título da página"/>
-
+            <!--
+            /**
+             * @brief Seção que apresenta informações gerais do ticket.
+             */
+            -->
             <GroupBox Header="Informações Gerais" Margin="0,0,0,15">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
@@ -150,7 +195,11 @@
                     <TextBlock Text="{Binding DataConclusao, StringFormat=\{0:dd/MM/yyyy HH:mm\}}" Style="{StaticResource ValueTextBlock}" Grid.Row="7" Grid.Column="1"/>
                 </Grid>
             </GroupBox>
-
+            <!--
+            /**
+             * @brief Seção para definir o estado de atendimento do ticket.
+             */
+            -->
             <GroupBox Header="Estado do Atendimento" Margin="0,0,0,15">
                 <StackPanel Margin="10">
                     <TextBlock Text="Problema Resolvido:" Style="{StaticResource LabelTextBlock}" />
@@ -166,7 +215,11 @@
                             KeyboardNavigation.TabIndex="1"/>
                 </StackPanel>
             </GroupBox>
-
+            <!--
+            /**
+             * @brief Seção que exibe informações técnicas relacionadas ao ticket.
+             */
+            -->
             <GroupBox Header="Informações Técnicas" Margin="0,0,0,15">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
